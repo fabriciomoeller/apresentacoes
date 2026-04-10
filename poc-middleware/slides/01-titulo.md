@@ -1,6 +1,10 @@
+<script setup>
+const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
+</script>
+
 <DecoShapes opacity="0.10" />
 
-<img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="mx-auto" style="width: 120px;" />
+<img :src="datainfoPng" class="mx-auto" style="width: 120px;" />
 
 # EME4 — Integração via Middleware
 

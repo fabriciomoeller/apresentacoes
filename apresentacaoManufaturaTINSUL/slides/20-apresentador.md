@@ -3,6 +3,10 @@ transition: fade
 layout: center
 ---
 
+<script setup>
+const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
+</script>
+
 <div class="flex flex-col items-center gap-6 max-w-680px mx-auto">
 
   <!-- Avatar / Foto -->
@@ -19,7 +23,7 @@ layout: center
   <div class="text-center">
     <h2 class="text-3xl font-800 text-slate-800 dark:text-slate-100 mb-1">Fabricio Moeller</h2>
     <div class="text-[1rem] font-600 text-blue-600 dark:text-blue-400">Engenheiro de Software · ERP EME4</div>
-    <img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="h-5 mx-auto mt-1 opacity-70" />
+    <img :src="datainfoPng" class="h-5 mx-auto mt-1 opacity-70" />
   </div>
 
   <!-- Divider -->

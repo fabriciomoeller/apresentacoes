@@ -145,17 +145,19 @@ O Vite **não reescreve** URLs absolutas (`/arquivo.png`) em inline styles nem a
 <img src="/datainfo.png" />
 <div style="background-image:url('/capa-eme4-bg.png')"></div>
 
-<!-- ✅ CORRETO — usa BASE_URL que o Vite injeta corretamente -->
+<!-- ❌ ERRADO — import.meta não é aceito em expressões de binding do template Vue -->
 <img :src="`${import.meta.env.BASE_URL}datainfo.png`" />
 
-<!-- ✅ CORRETO — background via script setup -->
+<!-- ✅ CORRETO — sempre via <script setup>, nunca inline no binding -->
 <script setup>
+const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
 const bgUrl = `url(${import.meta.env.BASE_URL}capa-eme4-bg.png)`
 </script>
+<img :src="datainfoPng" />
 <div :style="{ backgroundImage: bgUrl }"></div>
 ```
 
-`import.meta.env.BASE_URL` resolve para `/` em dev e para `/apresentacoes/<subdir>/` em produção — funciona nos dois ambientes sem alteração.
+`import.meta.env.BASE_URL` resolve para `/` em dev e para `/apresentacoes/<subdir>/` em produção — funciona nos dois ambientes sem alteração. **Só pode ser usado dentro de `<script setup>`, nunca diretamente em expressões de atributo Vue (`:src="..."`).**
 
 ### Tema e fontes
 

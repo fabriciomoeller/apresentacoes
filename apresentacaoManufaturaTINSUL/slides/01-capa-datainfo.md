@@ -3,10 +3,15 @@ class: text-center
 transition: slide-left
 ---
 
+<script setup>
+const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
+const logoDatainfoPng = import.meta.env.BASE_URL + 'logo_datainfo.png'
+</script>
+
 <DecoShapes opacity="0.10" />
 
-<img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="mx-auto hidden dark:block" style="width: 120px;" />
-<img :src="`${import.meta.env.BASE_URL}logo_datainfo.png`" class="mx-auto block dark:hidden" style="width: 120px;" />
+<img :src="datainfoPng" class="mx-auto hidden dark:block" style="width: 120px;" />
+<img :src="logoDatainfoPng" class="mx-auto block dark:hidden" style="width: 120px;" />
 
 # Planejamento Inteligente de Produção
 
