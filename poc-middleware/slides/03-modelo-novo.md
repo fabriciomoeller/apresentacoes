@@ -1,0 +1,185 @@
+---
+layout: center
+transition: slide-left
+---
+
+# Modelo Novo — Middleware
+
+<div class="gradient-subtitle text-[1.1rem]">Dois modos que coexistem no mesmo Middleware</div>
+
+<div class="gradient-divider mx-auto mt-4 mb-8"></div>
+
+<div class="grid grid-cols-2 gap-8 w-full max-w-3xl">
+  <div class="mode-card mode-card-cyan">
+    <div class="mode-number bg-cyan-500/15 text-cyan-600 dark:text-cyan-400"><span class="i-ph-arrow-right-bold inline-block text-[1.2em]"></span></div>
+    <div class="mode-title text-cyan-700 dark:text-cyan-300">Passagem Direta</div>
+    <div class="mode-desc">Sem tradutor. Sem fila.<br>Direto e rápido.</div>
+    <div class="mode-use">IA, Dashboards, Consultas</div>
+  </div>
+  <div class="mode-card mode-card-fuchsia">
+    <div class="mode-number"><span class="i-ph-arrows-clockwise-bold inline-block text-[1.2em]"></span></div>
+    <div class="mode-title text-fuchsia-700 dark:text-fuchsia-300">Com Tradutor</div>
+    <div class="mode-desc">Fila NATS + Worker<br>Tradução DE-PARA + Garantia de entrega</div>
+    <div class="mode-use">Ex: ERP → EME4 (com tradução)</div>
+  </div>
+</div>
+
+<div class="s6-message mt-8 text-sm opacity-50 text-center" v-motion :initial="{opacity:0, y:10}" :enter="{opacity:1, y:0, transition:{delay:800}}">
+  Worker só existe quando há trabalho real a fazer como a tradução DE-PARA.
+</div>
+
+<!--
+- O Middleware oferece DOIS modos — não é "um ou outro", coexistem
+- Passagem Direta: para sistemas que já falam a linguagem do EME4 (IA, dashboards)
+- Com Tradutor: para sistemas legados que precisam de tradução DE-PARA
+- O Worker só existe quando necessário — não é overhead permanente
+-->
+
+---
+transition: slide-up
+---
+
+# Como funcionaria com o MIDDLEWARE
+
+<div class="gradient-subtitle text-[0.9rem]">Dois modos: o Worker só existe quando há trabalho a fazer</div>
+<div class="gradient-divider mx-auto mt-2 mb-2"></div>
+
+<div class="accent-bar accent-bar-cyan mt-1">
+  <span class="i-ph-arrow-right-bold inline-block text-cyan-600 dark:text-cyan-400 align-middle"></span> Passagem direta — sem fila, sem tradutor, rápido
+</div>
+
+<ScenarioFlow>
+  <FlowNode label="Agente IA" icon="i-carbon-bot" color="blue" position="top-50% -translate-y-50% left-0 w-90px h-56px" sub="(futuro)" hint="<strong>Agente de IA</strong> (futuro)<br>Consulta dados via porta única<br>Sem saber a auth de cada sistema" />
+  <FlowNode label="Kong" icon="i-ph-shield-check-fill" color="purple" position="top-50% -translate-y-50% left-200px w-95px h-56px" sub="Auth + LB" hint="<strong>API Gateway — Porta de Entrada</strong><br>Valida credenciais (JWT, API Key)<br>Distribui carga (Load Balancing)<br>Limita requisições abusivas (Rate Limit)" />
+  <FlowNode label="EME4 1" icon="i-carbon-bare-metal-server-02" color="cyan" position="eme4-top" sub=" online" subIcon="i-svg-spinners-pulse-3" hint="<strong>Sistema Provedor</strong> (destino)<br>Recebe chamadas normais da API<br>Não sabe que existe middleware" />
+  <FlowNode label="EME4 2" icon="i-carbon-bare-metal-server-02" color="cyan" position="eme4-bottom" sub=" online" subIcon="i-svg-spinners-pulse-3" hint="<strong>Sistema Provedor</strong> (destino)<br>Recebe chamadas normais da API<br>Não sabe que existe middleware" />
+  <div class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 580 140">
+      <line x1="92" y1="70" x2="200" y2="70" class="svg-line svg-stroke-blue"/>
+      <FlowDot d="M100,70 L210,70" color="blue" :duration="2" />
+      <FlowDot d="M100,70 L210,70" color="blue" :duration="2" :delay="1" />
+    </svg>
+  </div>
+  <div class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 580 140">
+      <path d="M300,70 L360,70 Q370,70 370,63 L370,42 Q370,35 380,35 L420,35" class="svg-line svg-stroke-purple"/>
+      <path d="M300,70 L360,70 Q370,70 370,77 L370,98 Q370,105 380,105 L420,105" class="svg-line svg-stroke-purple"/>
+      <FlowDot d="M340,70 L360,70 Q370,70 370,63 L370,42 Q370,35 380,35 L430,35" color="purple" :duration="2.5" />
+      <FlowDot d="M340,70 L360,70 Q370,70 370,77 L370,98 Q370,105 380,105 L430,105" color="purple" :duration="3" :delay="1.5" />
+    </svg>
+    <FlowBadge text=" direto, sem fila" icon="i-ph-lightning-fill" color="cyan" position="left-95 top-15" bordered />
+  </div>
+</ScenarioFlow>
+
+---
+transition: slide-left
+---
+
+# <span class="i-ph-arrows-clockwise-bold inline-block text-fuchsia-600 dark:text-fuchsia-400 align-middle"></span> Com Tradutor (Worker)
+
+<div class="gradient-subtitle text-[0.9rem]">Quando há trabalho real — tradução, orquestração, garantia de entrega</div>
+<div class="gradient-divider mx-auto mt-2 mb-4"></div>
+
+<div class="anim-flow max-w-750px h-120px my-4" v-motion :initial="{opacity:0}" :enter="{opacity:1, transition:{delay:200, duration:600}}">
+  <FlowNode label="ORIGEM" icon="i-ph-plugs-connected-fill" color="blue" position="top-50% -translate-y-50% left-0 w-88px h-52px" sub="ex: Sistema" hint="<strong>Sistema Consumidor</strong><br>Qualquer sistema externo que precisa enviar ou consultar dados no EME4.<br>Ex: ERP, Portal, App Mobile" />
+  <FlowNode label="KONG" icon="i-ph-shield-check-fill" color="violet" position="top-50% -translate-y-50% left-160px w-78px h-52px" sub="portaria" hint="<strong>API Gateway — Porta de Entrada</strong><br>Valida credenciais (JWT, API Key)<br>Distribui carga (Load Balancing)<br>Limita requisições abusivas (Rate Limit)" />
+  <FlowNode label="NATS" icon="i-ph-cloud-arrow-up-fill" color="cyan" position="top-50% -translate-y-50% left-310px w-78px h-52px" sub="fila" hint="<strong>Message Broker — Sistema Nervoso</strong><br>Recebe mensagens e garante entrega<br>Persiste em disco (JetStream)<br>Retry automático com backoff">
+    <template #right><FlowMsgStack :clicks="$clicks" :fill-at="2" :drain-at="4" /></template>
+  </FlowNode>
+  <FlowNode label="Worker" icon="i-ph-gear-six-fill" color="fuchsia" position="top-50% -translate-y-50% left-465px w-88px h-52px" sub="tradutor" hint="<strong>Executor de Lógica</strong><br>Consome mensagens da fila NATS<br>Transforma formatos (XML→JSON)<br>Mapeia campos DE→PARA" />
+  <FlowNode label="EME4 1" v-click.hide="6" icon="i-carbon-bare-metal-server-02" color="cyan" position="top-4px left-630px w-88px h-38px" size="top" hint="<strong>Sistema Provedor</strong> (destino)<br>Recebe chamadas normais da API<br>Não sabe que existe middleware" />
+  <FlowNode label="EME4 2" icon="i-carbon-bare-metal-server-02" color="cyan" position="bottom-4px left-630px w-88px h-38px" size="top" hint="<strong>Sistema Provedor</strong> (destino)<br>Recebe chamadas normais da API<br>Não sabe que existe middleware" />
+  <div v-click="1" class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 750 110">
+      <line x1="90" y1="55" x2="160" y2="55" class="svg-line svg-stroke-blue"/>
+      <FlowDot d="M90,55 L160,55" color="blue" :duration="1.2" />
+      <FlowDot d="M90,55 L160,55" color="blue" :duration="1.2" :delay="0.6" />
+    </svg>
+  </div>
+  <div v-click="2" class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 750 110">
+      <line x1="240" y1="55" x2="310" y2="55" class="svg-line svg-stroke-purple"/>
+      <FlowDot d="M240,55 L310,55" color="purple" :duration="1.2" />
+      <FlowDot d="M240,55 L310,55" color="purple" :duration="1.2" :delay="0.6" />
+    </svg>
+  </div>
+  <div v-click="3" class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 750 110">
+      <path d="M199,81 L199,88 Q199,96 191,96 L51,96 Q44,96 44,88 L44,81" class="svg-line-return svg-stroke-cyan"/>
+      <FlowDot d="M199,81 L199,96 L44,96 L44,81" color="cyan" :duration="1.2" />
+    </svg>
+    <FlowBadge text="✓ 202 Accepted" color="cyan" position="left-75px bottom-20px" />
+  </div>
+  <div v-click="4" class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 750 110">
+      <line x1="390" y1="55" x2="465" y2="55" class="svg-line svg-stroke-cyan"/>
+      <FlowDot d="M390,55 L465,55" color="cyan" :duration="3.5" />
+      <FlowDot d="M390,55 L465,55" color="cyan" :duration="3.5" :delay="0.6" />
+    </svg>
+  </div>
+  <div v-click="5" class="anim-seg">
+    <svg class="anim-svg" viewBox="0 0 750 110">
+      <path v-click.hide="6" d="M553,55 L573,55 Q580,55 580,48 L580,30 Q580,23 587,23 L630,23" class="svg-line svg-stroke-fuchsia"/>
+      <path d="M553,55 L573,55 Q580,55 580,62 L580,80 Q580,87 587,87 L630,87" class="svg-line svg-stroke-fuchsia"/>
+      <FlowDot v-click.hide="6" d="M553,55 L573,55 Q580,55 580,48 L580,30 Q580,23 587,23 L630,23" color="fuchsia" :duration="5" />
+      <FlowDot d="M553,55 L573,55 Q580,55 580,62 L580,80 Q580,87 587,87 L630,87" color="fuchsia" :duration="5" :delay="1.25" />
+      <FlowDot v-click.hide="6" d="M553,55 L573,55 Q580,55 580,48 L580,30 Q580,23 587,23 L630,23" color="fuchsia" :duration="5" :delay="2.5" />
+      <FlowDot d="M553,55 L573,55 Q580,55 580,62 L580,80 Q580,87 587,87 L630,87" color="fuchsia" :duration="5" :delay="3.75" />
+    </svg>
+  </div>
+  <div v-click="6" class="anim-seg">
+    <FlowNode label="EME4 1" icon="i-ph-x-circle-fill" color="pink" position="top-4px left-630px w-88px h-38px z-5" size="top" hint="<strong>EME4 1 — Erro</strong><br>Worker devolve à fila (<strong>Nak</strong>)<br>NATS retenta com backoff exponencial" />
+    <svg class="anim-svg" viewBox="0 0 750 90">
+      <path d="M630,3 Q630,4 616,4 L524,4 Q510,4 510,18" class="svg-line-return svg-stroke-pink"/>
+      <FlowDot d="M630,18 L630,4 L510,4 L510,18" color="pink" :duration="2" :loop="false"/>
+      <path d="M509,70 Q509,85 495,85 L364,85 Q350,85 350,70" class="svg-line-return svg-stroke-cyan"/>
+      <FlowDot d="M509,70 L509,85 L350,85 L350,70" color="cyan" :duration="2" :loop="false" delay="2"/>
+    </svg>
+    <FlowBadge text="✕ erro/timeout" color="pink" position="right-140px top-0px" />
+    <FlowBadge text="Nak → refila" icon="i-ph-arrow-counter-clockwise-fill" color="cyan" position="left-380px bottom-20px" />
+  </div>
+</div>
+
+<div class="flex flex-col gap-2 max-w-750px mx-auto">
+<div v-click="1" class="step-item-sm text-[0.60em] border-l-blue-500 text-blue-700 dark:text-blue-300">
+  <div class="num-badge w-24px h-24px bg-blue-500/20 text-blue-600 dark:text-blue-400">1</div>
+  <div>Sistema externo envia os dados para o APIGATEWAY Kong/APISIX</div>
+</div>
+<div v-click="2" class="step-item-sm text-[0.60em] border-l-violet-500 text-violet-700 dark:text-violet-300">
+  <div class="num-badge w-24px h-24px bg-violet-500/20 text-purple-600 dark:text-purple-300">2</div>
+  <div>Kong/APISIX autentica e coloca a mensagem na fila (NATS JetStream)</div>
+</div>
+<div v-click="3" class="step-item-sm text-[0.60em] border-l-cyan-500 text-cyan-700 dark:text-cyan-300 font-600">
+  <div class="num-badge w-24px h-24px bg-cyan-500/20 text-cyan-600 dark:text-cyan-400">3</div>
+  Sistema origem recebe "Recebido!" (202 Accepted) e segue em frente.<br> Desacoplamento total para enviar outras mensagens
+</div>
+<div v-click="4" class="step-item-sm text-[0.60em] border-l-fuchsia-500 text-fuchsia-700 dark:text-fuchsia-300">
+  <div class="num-badge w-24px h-24px bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">4</div>
+  <div>Worker pega da fila e traduz campos (DE-PARA: SG1 → ListaMateriaisProduto)</div>
+</div>
+<div v-click="5" class="step-item-sm text-[0.60em] border-l-fuchsia-500 text-fuchsia-700 dark:text-fuchsia-300">
+  <div class="num-badge w-24px h-24px bg-fuchsia-500/20 text-fuchsia-600 dark:text-fuchsia-400">5</div>
+  <div>Load Balancer escolhe a melhor instância do EME4 (menos ocupada)</div>
+</div>
+<div v-click="6" class="step-item-sm text-[0.60em] border-l-cyan-500 text-cyan-700 dark:text-cyan-300">
+  <div class="num-badge w-24px h-24px bg-cyan-500/20 text-cyan-600 dark:text-cyan-400">6</div>
+  <div>Se der erro → Worker devolve à fila (<strong>Nak</strong>) → NATS retenta com backoff exponencial</div>
+</div>
+</div>
+
+<!--
+- Este é o fluxo COMPLETO do modo com tradutor — o coração da POC
+- Passo 3 é o mais importante: o sistema origem recebe 202 e SEGUE EM FRENTE
+- Desacoplamento total: quem envia não precisa esperar o processamento
+- Worker faz a tradução DE-PARA (ex: campo SG1 vira ListaMateriaisProduto)
+- Se der erro, NATS garante retry com backoff exponencial (5s, 30s, 2min...)
+- Nenhuma mensagem se perde
+-->
+
+
+<!--
+- Visão consolidada dos dois modos do Middleware funcionando
+- Modo 1 (Passagem Direta): IA e dashboards falam direto via Kong — rápido e sem overhead
+- Modo 2 (Com Worker): ERP externo usa fila + tradução — seguro e desacoplado
+- Cinco benefícios principais: LB, Failover, Auth, Rastreabilidade, Resiliência
+-->

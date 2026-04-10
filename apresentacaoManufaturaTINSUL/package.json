@@ -1,0 +1,14 @@
+{
+  "name": "manufatura-mrp-tinsul-slidev",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@oxc-parser/binding-linux-x64-gnu": "^0.115.0",
+    "@slidev/cli": "^52.14.1",
+    "@slidev/theme-default": "latest"
+  }
+}
