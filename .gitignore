@@ -6,6 +6,7 @@ node_modules/
 
 # Build Slidev
 dist/
+_site/
 .slidev/
 *.local
 

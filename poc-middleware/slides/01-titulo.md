@@ -1,6 +1,6 @@
 <DecoShapes opacity="0.10" />
 
-<img src="/datainfo.png" class="mx-auto" style="width: 120px;" />
+<img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="mx-auto" style="width: 120px;" />
 
 # EME4 — Integração via Middleware
 

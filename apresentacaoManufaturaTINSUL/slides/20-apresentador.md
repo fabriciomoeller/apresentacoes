@@ -8,8 +8,6 @@ layout: center
   <!-- Avatar / Foto -->
   <div class="relative">
     <div class="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl font-800 shadow-lg shadow-blue-500/30">
-      <!-- Substitua pela tag <img> quando tiver foto: -->
-      <!-- <img src="/foto-apresentador.jpg" class="w-full h-full rounded-full object-cover" /> -->
       FM
     </div>
     <div class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center shadow-md">
@@ -21,7 +19,7 @@ layout: center
   <div class="text-center">
     <h2 class="text-3xl font-800 text-slate-800 dark:text-slate-100 mb-1">Fabricio Moeller</h2>
     <div class="text-[1rem] font-600 text-blue-600 dark:text-blue-400">Engenheiro de Software · ERP EME4</div>
-    <img src="/datainfo.png" class="h-5 mx-auto mt-1 opacity-70" />
+    <img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="h-5 mx-auto mt-1 opacity-70" />
   </div>
 
   <!-- Divider -->

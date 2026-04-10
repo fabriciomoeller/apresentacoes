@@ -4,7 +4,10 @@ transition: slide-left
 ---
 
 <!-- Fundo com imagem oficial EME4 -->
-<div class="absolute inset-0 bg-cover bg-center" style="background-image:url('/capa-eme4-bg.png');"></div>
+<script setup>
+const bgUrl = `url(${import.meta.env.BASE_URL}capa-eme4-bg.png)`
+</script>
+<div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: bgUrl }"></div>
 
 <!-- Conteúdo na metade esquerda -->
 <div class="absolute top-0 left-0 bottom-0 flex flex-col justify-center pl-14 pb-16 text-left">

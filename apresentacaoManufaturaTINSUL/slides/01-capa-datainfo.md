@@ -5,8 +5,8 @@ transition: slide-left
 
 <DecoShapes opacity="0.10" />
 
-<img src="/datainfo.png" class="mx-auto hidden dark:block" style="width: 120px;" />
-<img src="/logo_datainfo.png" class="mx-auto block dark:hidden" style="width: 120px;" />
+<img :src="`${import.meta.env.BASE_URL}datainfo.png`" class="mx-auto hidden dark:block" style="width: 120px;" />
+<img :src="`${import.meta.env.BASE_URL}logo_datainfo.png`" class="mx-auto block dark:hidden" style="width: 120px;" />
 
 # Planejamento Inteligente de Produção
 

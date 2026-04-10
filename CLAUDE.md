@@ -9,7 +9,7 @@ Contém duas apresentações **Slidev** independentes (não é monorepo — sem 
 - `apresentacaoManufaturaTINSUL/` — Manufatura, MRP, Custos & Qualidade (TINSUL Tintas Ltda.)
 - `poc-middleware/` — POC de Middleware EME4 (Kong/APISIX + NATS JetStream)
 
-> **Atenção:** `docs/slides/` vive fisicamente dentro do repositório do ERP 51908 (`/home/fabricio/Desenvolvimento/Datainfo/51908`), mas deve ter repositório Git **separado** para publicação via GitHub Pages. Rodar `git rev-parse --show-toplevel` antes de qualquer operação de Git — se retornar o path do ERP, o repo dos slides ainda não foi inicializado isoladamente. Ver skill `slides-publish`.
+> **Atenção — repo aninhado:** `docs/slides/` vive fisicamente dentro do repositório do ERP 51908 (`/home/fabricio/Desenvolvimento/Datainfo/51908`), mas tem seu **próprio** repositório Git isolado (`github.com:fabriciomoeller/apresentacoes.git`). Antes de qualquer operação Git, confirmar com `git rev-parse --show-toplevel` que o toplevel é `.../docs/slides` — se retornar o path do ERP, está no repo errado.
 
 ## Comandos
 
@@ -28,9 +28,61 @@ cd poc-middleware && npm run build
 cd <pasta> && npm run export
 ```
 
-Para publicar no GitHub Pages com as **duas** apresentações no mesmo repo, cada build precisa do `--base` apontando para seu subcaminho final (ex: `npx slidev build --base /<repo>/tinsul/ --out ../_site/tinsul`). Um `--base` errado quebra todos os assets (tela em branco). Ver skill `slides-publish` para o fluxo completo de deploy.
-
 Não há test runner, linter ou type-check configurados neste diretório.
+
+## Git e publicação (GitHub Pages)
+
+- **Remote:** `git@github.com:fabriciomoeller/apresentacoes.git`
+- **Branches:** `main` (fontes) e `gh-pages` (site publicado — histórico descartável, force-push permitido)
+- **URLs publicadas:**
+  - Hub: `https://fabriciomoeller.github.io/apresentacoes/`
+  - Manufatura TINSUL: `https://fabriciomoeller.github.io/apresentacoes/manufaturaTinsul/`
+  - POC Middleware: `https://fabriciomoeller.github.io/apresentacoes/poc-middleware/`
+- **Setup único no GitHub:** `Settings → Pages → Source: Deploy from a branch → gh-pages / (root)`.
+
+### Commit no `main` (fontes)
+
+- Mensagens em pt-BR no formato `<tipo>(<apresentacao>): <descrição>`. Tipos: `feat`, `fix`, `docs`, `style`, `refactor`, `chore`.
+- **Nunca** `git add .` / `git add -A` — stage por caminho explícito (`git add .gitignore CLAUDE.md apresentacaoManufaturaTINSUL poc-middleware`). O `.gitignore` já filtra `node_modules/`, `dist/`, `_site/`, `.claude/`, `teste.md`.
+- Usar HEREDOC para mensagens multi-linha com trailer `Co-Authored-By`.
+- Nunca commitar sem o usuário pedir explicitamente.
+
+### Build das duas apresentações
+
+O `--base` precisa começar e terminar com `/` e bater com o caminho final no GitHub Pages — valor errado quebra todos os assets (tela branca). A partir de `docs/slides/`:
+
+```bash
+rm -rf _site
+(cd apresentacaoManufaturaTINSUL && npx slidev build --base /apresentacoes/manufaturaTinsul/ --out ../_site/manufaturaTinsul)
+(cd poc-middleware            && npx slidev build --base /apresentacoes/poc-middleware/  --out ../_site/poc-middleware)
+```
+
+O `_site/index.html` (hub com links para as duas) fica **versionado** no `main` — editar manualmente se o nome do repo ou dos subcaminhos mudar (ou se aparecer uma terceira apresentação). Nunca versionar o conteúdo gerado em `_site/manufaturaTinsul/` ou `_site/poc-middleware/`.
+
+### Deploy para `gh-pages`
+
+**Não usar `npx gh-pages`** — falha em `docs/slides/` por não achar um `package.json` raiz (`ERR_INVALID_ARG_TYPE` em `getCacheDir`). Usar o fluxo manual via repo temporário:
+
+```bash
+TEMP=$(mktemp -d -t ghpages-XXXX)
+cp -a _site/. "$TEMP/"
+touch "$TEMP/.nojekyll"                 # impede o Jekyll de ignorar pastas com "_"
+(
+  cd "$TEMP"
+  git init -q -b gh-pages
+  git add .
+  git commit -q -m "deploy: atualiza apresentações Slidev"
+  git remote add origin git@github.com:fabriciomoeller/apresentacoes.git
+  git push -f -u origin gh-pages
+)
+rm -rf "$TEMP"
+```
+
+Pontos críticos:
+- **`.nojekyll` é obrigatório** — sem ele o GitHub Pages roda o Jekyll e ignora arquivos/pastas começando com `_` (quebra assets do Slidev).
+- Force-push é intencional — a branch `gh-pages` não tem histórico relevante, cada deploy é um commit único gerado.
+- Propagação leva ~1-2 min após o push.
+- Se qualquer asset referenciado como `/arquivo.ext` não estiver em `public/` do projeto, ele **não** aparece no `dist/` e quebra em produção (ver seção Assets).
 
 ## Arquitetura das apresentações
 
@@ -78,9 +130,32 @@ Slidev registra automaticamente componentes em `components/` — usar direto no 
 
 ### Assets
 
-- Logos (`datainfo.png`, `logo_datainfo.png`) ficam na **raiz de cada projeto** — referenciados como `/datainfo.png` nos slides (Slidev serve a raiz do projeto como static).
-- `public/` é o diretório estático padrão do Slidev para assets adicionais (usado no `poc-middleware` para `visao-estrategica.svg`).
-- Pastas vazias como `public/` no TINSUL são legítimas — não remover.
+- **Todo asset precisa estar em `public/`** do projeto. Slidev/Vite não serve a raiz do projeto como estático — arquivos fora de `public/` ficam de fora do `dist/` e quebram em produção.
+- Convenção: logos compartilhados (`datainfo.png`, `logo_datainfo.png`) vivem em `<projeto>/public/` de cada apresentação — são duplicados intencionalmente porque cada Slidev tem seu próprio `public/`.
+- Assets específicos (fundos de capa, ilustrações) também em `public/` do projeto que os usa.
+
+#### CRÍTICO — Referências de assets com `--base`
+
+O Vite **não reescreve** URLs absolutas (`/arquivo.png`) em inline styles nem atributos `src` estáticos com o valor do `--base`. Isso gera 404 em produção mesmo que o arquivo exista em `public/`.
+
+**Padrão obrigatório** para referenciar assets de `public/` nos slides:
+
+```html
+<!-- ❌ ERRADO — quebra em produção com --base -->
+<img src="/datainfo.png" />
+<div style="background-image:url('/capa-eme4-bg.png')"></div>
+
+<!-- ✅ CORRETO — usa BASE_URL que o Vite injeta corretamente -->
+<img :src="`${import.meta.env.BASE_URL}datainfo.png`" />
+
+<!-- ✅ CORRETO — background via script setup -->
+<script setup>
+const bgUrl = `url(${import.meta.env.BASE_URL}capa-eme4-bg.png)`
+</script>
+<div :style="{ backgroundImage: bgUrl }"></div>
+```
+
+`import.meta.env.BASE_URL` resolve para `/` em dev e para `/apresentacoes/<subdir>/` em produção — funciona nos dois ambientes sem alteração.
 
 ### Tema e fontes
 
@@ -88,4 +163,4 @@ Ambos usam `theme: default` com override de fontes (`Nunito Sans` + `Fira Code`)
 
 ## Skill relacionada
 
-`.claude/skills/slides-publish/SKILL.md` padroniza o fluxo de commit e deploy no GitHub Pages (init do repo isolado, mensagens em pt-BR no formato `<tipo>(<apresentacao>): <descrição>`, build com `--base` correto, publicação via `gh-pages` na branch `gh-pages`). Usar esta skill quando o usuário pedir para salvar, commitar, publicar ou fazer deploy das apresentações.
+`.claude/skills/slides-publish/SKILL.md` traz o fluxo completo em forma de skill acionável. Usar quando o usuário pedir para salvar, commitar, publicar ou fazer deploy das apresentações — o CLAUDE.md descreve o **quê**, a skill descreve o **como** passo a passo.
