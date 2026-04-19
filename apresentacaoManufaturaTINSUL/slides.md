@@ -14,9 +14,6 @@ fonts:
   sans: Nunito Sans
   mono: Fira Code
   weights: '200,400,600'
----
-
----
 src: ./slides/01-capa-eme4.md
 ---
 
