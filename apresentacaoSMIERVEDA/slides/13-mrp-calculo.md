@@ -5,7 +5,14 @@ transition: fade
 # Suprimentos: Cálculo de Necessidades
 
 <div class="gradient-subtitle text-[0.9rem]">O sistema responde: O QUE, QUANTO e QUANDO comprar/transferir/industrializar?</div>
-<div class="gradient-divider mx-auto mt-2 mb-3"></div>
+<div class="gradient-divider mx-auto mt-2 mb-2"></div>
+
+<div class="mx-auto mb-3 max-w-520px py-1 px-3 rounded-10px border-1 border-solid border-purple-400/30 bg-purple-500/6 text-center">
+  <div class="text-[10px] font-700 text-purple-700 dark:text-purple-300">
+    <span class="i-ph-cpu-fill inline-block mr-1 align-middle text-purple-500"></span>
+    Motor <strong>MRP</strong> (Material Requirements Planning) — núcleo do módulo de Suprimentos
+  </div>
+</div>
 
 <div class="grid grid-cols-[1fr_1.8fr] gap-4 max-w-720px mx-auto">
   <div>
@@ -55,7 +62,7 @@ transition: fade
 ROTEIRO DO APRESENTADOR — Suprimentos: Cálculo de Necessidades
 
 Contexto para abrir:
-"O módulo de Suprimentos responde três perguntas: O QUE comprar ou industrializar, QUANTO e QUANDO. Vamos ver o pipeline completo em 9 etapas e depois a explosão real com números da SMIERVEDA."
+"O módulo de Suprimentos responde três perguntas: O QUE comprar ou industrializar, QUANTO e QUANDO. O motor por trás desse cálculo é o MRP — Material Requirements Planning — padrão de mercado desde os anos 70 e núcleo de qualquer ERP industrial. Vamos ver o pipeline completo em 9 etapas e depois a explosão real com números da SMIERVEDA."
 
 Ao percorrer o pipeline (lado esquerdo):
 "Etapas 1 a 5 são coleta de dados — parâmetros, estoque das 3 filiais, pedidos em carteira, contratos firmes (mineração e sucroalcooleiro), OIs e OCs já em andamento. O sistema não duplica o que já está em rota. Etapas 6 e 7 são o coração: carregar as estruturas de kit e nivelar de baixo para cima. Etapas 8 e 9 calculam e gravam estatísticas."
