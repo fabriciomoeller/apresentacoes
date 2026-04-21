@@ -97,5 +97,41 @@ src: ./slides/12-visao-estrategica.md
 ---
 
 ---
-src: ./slides/13-recomendacao.md
+src: ./slides/13-mcc-capa.md
+---
+
+---
+src: ./slides/14-mcc-analogia-k8s.md
+---
+
+---
+src: ./slides/15-mcc-control-vs-data-plane.md
+---
+
+---
+src: ./slides/16-mcc-flow-builder.md
+---
+
+---
+src: ./slides/17-mcc-empresa-filial.md
+---
+
+---
+src: ./slides/18-mcc-perfis-plugins.md
+---
+
+---
+src: ./slides/19-mcc-anatomia-plugin.md
+---
+
+---
+src: ./slides/20-mcc-secrets-cofre.md
+---
+
+---
+src: ./slides/21-mcc-resiliencia.md
+---
+
+---
+src: ./slides/22-recomendacao.md
 ---
