@@ -16,40 +16,40 @@ transition: slide-left
   </div>
 
   <div class="grid grid-cols-2 gap-1.5">
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-blue-500/30 bg-blue-500/5 text-blue-700 dark:text-blue-400 text-[10px] font-600">
+    <div title="Nota Fiscal Eletrônica (modelo 55) — operações fiscais B2B de mercadorias" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-blue-500/30 bg-blue-500/5 text-blue-700 dark:text-blue-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-receipt-fill"></span> NF-e
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-blue-500/30 bg-blue-500/5 text-blue-700 dark:text-blue-400 text-[10px] font-600">
+    <div title="Nota Fiscal do Consumidor Eletrônica (modelo 65) — varejo e venda a consumidor final" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-blue-500/30 bg-blue-500/5 text-blue-700 dark:text-blue-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-receipt-fill"></span> NFC-e
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600">
+    <div title="Nota Fiscal de Serviços Eletrônica — emissão municipal (ISS). Piloto implementado nas Fases 1-3" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-receipt-fill"></span> NFS-e
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600">
+    <div title="Conhecimento de Transporte Eletrônico — documento fiscal de prestação de serviço de transporte de cargas" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-truck-fill"></span> CT-e
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600">
+    <div title="Manifesto Eletrônico de Documentos Fiscais — agrupa NF-e/CT-e durante o trânsito da carga" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-package-fill"></span> MDF-e
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600">
+    <div title="Sistema Autenticador e Transmissor — cupom fiscal eletrônico (equipamento SAT-CF-e, principalmente SP)" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-cyan-500/30 bg-cyan-500/5 text-cyan-700 dark:text-cyan-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-storefront-fill"></span> SAT
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-purple-500/30 bg-purple-500/5 text-purple-700 dark:text-purple-300 text-[10px] font-600">
+    <div title="Envio de e-mails transacionais via servidor SMTP (boletos, notas, confirmações, avisos)" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-purple-500/30 bg-purple-500/5 text-purple-700 dark:text-purple-300 text-[10px] font-600 cursor-help">
       <span class="i-ph-envelope-fill"></span> SMTP
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-purple-500/30 bg-purple-500/5 text-purple-700 dark:text-purple-300 text-[10px] font-600">
+    <div title="Emissão e gestão de boletos bancários via API do Banco do Brasil (convênios, registro, baixa)" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-purple-500/30 bg-purple-500/5 text-purple-700 dark:text-purple-300 text-[10px] font-600 cursor-help">
       <span class="i-ph-bank-fill"></span> Boleto BB
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600">
+    <div title="Plataforma B2B de força de vendas e representação comercial — sincroniza pedidos, clientes e catálogo" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-shopping-cart-fill"></span> Mercos
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600">
+    <div title="Plataforma de e-commerce — sincronização de produtos, estoque, preços e pedidos com a loja virtual" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-storefront-fill"></span> Magazord
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600">
+    <div title="Gestão de postos de combustíveis — integração de abastecimentos, preços e movimentação de tanques" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-gas-pump-fill"></span> BitFuel
     </div>
-    <div class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600">
+    <div title="Sistema de gestão para franquias e redes — integração de pedidos, estoque e indicadores corporativos" class="flex items-center gap-1.5 px-2 py-1 rounded border border-solid border-fuchsia-500/30 bg-fuchsia-500/5 text-fuchsia-700 dark:text-fuchsia-400 text-[10px] font-600 cursor-help">
       <span class="i-ph-key-fill"></span> GIMPLUS
     </div>
   </div>
