@@ -78,6 +78,10 @@ src: ./slides/16-integracao-estoque.md
 ---
 
 ---
+src: ./slides/16b-contabilizacao-estoque-oi.md
+---
+
+---
 src: ./slides/17-custos.md
 ---
 
