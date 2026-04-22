@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Apresentações Datainfo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0b0f17;
+        --fg: #e5e7eb;
+        --muted: #94a3b8;
+        --card: #111827;
+        --border: #1f2937;
+        --accent: #38bdf8;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f8fafc;
+          --fg: #0f172a;
+          --muted: #475569;
+          --card: #ffffff;
+          --border: #e2e8f0;
+          --accent: #0284c7;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family:
+          "Nunito Sans",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+      main {
+        max-width: 720px;
+        width: 100%;
+      }
+      h1 {
+        font-size: 2rem;
+        margin: 0 0 0.25rem;
+        font-weight: 800;
+      }
+      p.sub {
+        color: var(--muted);
+        margin: 0 0 2rem;
+      }
+      .cards {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 640px) {
+        .cards {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      a.card {
+        display: block;
+        padding: 1.25rem 1.5rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        text-decoration: none;
+        color: inherit;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease;
+      }
+      a.card:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      a.card h2 {
+        margin: 0 0 0.35rem;
+        font-size: 1.1rem;
+        color: var(--accent);
+      }
+      a.card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      footer {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Apresentações Datainfo</h1>
+      <p class="sub">EME4 &middot; Apresentações técnicas e executivas</p>
+      <div class="cards">
+        <a class="card" href="./manufaturaTinsul/">
+          <h2>Manufatura &amp; MRP — TINSUL</h2>
+          <p>
+            Manufatura, MRP, Custos &amp; Qualidade — apresentação executiva
+            TINSUL Tintas Ltda.
+          </p>
+        </a>
+        <a class="card" href="./poc-middleware/">
+          <h2>POC Middleware — EME4</h2>
+          <p>
+            Prova de conceito de middleware para integração do EME4 (Kong/APISIX
+            + NATS JetStream).
+          </p>
+        </a>
+        <a class="card" href="./compras/">
+          <h2>Compras &amp; Suprimentos — TINSUL</h2>
+          <p>
+            Módulo de Compras — Requisição, Cotação, Ordem de Compra,
+            Recebimento, Nota Fiscal e Importação.
+          </p>
+        </a>
+        <a class="card" href="./smierveda/">
+          <h2>Distribuição &amp; Suprimentos — SMIERVEDA</h2>
+          <p>
+            Distribuição inteligente de vedações &amp; lubrificantes —
+            Cadastros, Suprimentos, Atendimento, Custos &amp; Qualidade
+            (Blumenau · Criciúma · Joinville).
+          </p>
+        </a>
+      </div>
+      <footer>Datainfo &middot; 2026</footer>
+    </main>
+  </body>
+</html>
