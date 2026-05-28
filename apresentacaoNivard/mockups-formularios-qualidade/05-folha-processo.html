@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Folha de Processo (FR015) · Qualidade Nivard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Stepper específico do traveler */
+    .traveler-steps { display: flex; gap: 0; margin-bottom: 22px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 8px; }
+    .traveler-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; position: relative; }
+    .traveler-step + .traveler-step::before { content: ''; position: absolute; left: -50%; top: 22px; width: 100%; height: 2px; background: #e2e8f0; z-index: 0; }
+    .traveler-step.done + .traveler-step::before { background: #10b981; }
+    .traveler-step .dot { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #94a3b8; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; z-index: 1; position: relative; }
+    .traveler-step.done .dot { background: #10b981; color: #fff; }
+    .traveler-step.current .dot { background: #2563eb; color: #fff; box-shadow: 0 0 0 4px #2563eb22; }
+    .traveler-step .label { font-size: 11px; font-weight: 700; color: #475569; text-align: center; }
+    .traveler-step.current .label { color: #2563eb; }
+    .traveler-step.done .label { color: #047857; }
+
+    /* Tabela compacta para pré-tratamento e aplicações */
+    table.process { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; }
+    table.process thead th { text-align: left; padding: 8px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 800; }
+    table.process tbody td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    table.process input, table.process select { padding: 6px 8px; font-size: 12px; }
+    table.process .mini-ar { display: inline-flex; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; font-size: 11px; }
+    table.process .mini-ar span { padding: 4px 8px; cursor: pointer; color: #64748b; font-weight: 700; }
+    table.process .mini-ar .a.on { background: #10b981; color: #fff; }
+    table.process .mini-ar .r.on { background: #e11d48; color: #fff; }
+
+    /* Aplicação (receita base/top) — bloco visual */
+    .application { border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-top: 12px; background: #fafbfc; }
+    .application + .application { margin-top: 12px; }
+    .application-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .application-head .title { font-size: 12px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: .06em; }
+    .application-head .title .num { display: inline-flex; width: 22px; height: 22px; border-radius: 6px; background: #2563eb; color: #fff; align-items: center; justify-content: center; font-size: 11px; margin-right: 8px; }
+
+    /* Zonas da estufa */
+    .estufa-grid { display: grid; grid-template-columns: auto repeat(4, 1fr); gap: 8px; align-items: center; margin-top: 10px; }
+    .estufa-grid .lbl { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .04em; padding-right: 12px; }
+    .zone { display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+    .zone .zlbl { font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
+    .zone .zval { font-size: 14px; font-weight: 800; color: #0f172a; }
+    .zone .zval input { width: 100%; padding: 4px 6px; font-size: 14px; font-weight: 800; border: 0; background: transparent; text-align: center; }
+    .zone .zval input:focus { box-shadow: none; }
+
+    /* Defeitos compactos */
+    .defects-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .defects-mini .check-item { font-size: 11px; padding: 6px 8px; }
+    .defects-mini .check-item .code { min-width: 32px; font-size: 10px; }
+
+    /* Banho usado mini-card */
+    .bath-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #ecfdf5; color: #047857; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <label for="nav-toggle" class="nav-close-btn" aria-label="Fechar menu"><i class="ph ph-x"></i></label>
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Qualidade Nivard</div>
+        <div class="brand-sub">Datainfo M3 · Web</div>
+      </div>
+    </div>
+    <div class="nav-section">Coleta · Pacote Inicial</div>
+    <a href="01-controle-banho.html" class="nav-item"><i class="ph-fill ph-flask"></i> Banho + Liberação</a>
+    <a href="02-laudo-final.html" class="nav-item"><i class="ph-fill ph-test-tube"></i> Laudo Final</a>
+    <a href="03-nao-conformidade.html" class="nav-item"><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</a>
+    <a href="04-certificado.html" class="nav-item"><i class="ph-fill ph-certificate"></i> Certificado</a>
+    <div class="nav-section">Coleta · Fase 2</div>
+    <a href="05-folha-processo.html" class="nav-item active"><i class="ph-fill ph-file-text"></i> Folha de Processo</a>
+    <a href="06-salt-spray-parametros.html" class="nav-item"><i class="ph-fill ph-drop"></i> SST · Parâmetros</a>
+    <a href="07-salt-spray-pecas.html" class="nav-item"><i class="ph-fill ph-cube"></i> SST · Peças</a>
+    <a href="08-programacao-pcp.html" class="nav-item"><i class="ph-fill ph-calendar"></i> Programação PCP</a>
+    <div class="nav-section">Painéis</div>
+    <a href="#" class="nav-item"><i class="ph ph-chart-line"></i> Dashboard</a>
+    <a href="#" class="nav-item"><i class="ph ph-list-checks"></i> NCs abertas</a>
+    <a href="index.html" class="nav-item" style="margin-top:auto"><i class="ph ph-arrow-left"></i> Voltar à demo</a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <label for="nav-toggle" class="nav-open-btn" aria-label="Abrir menu"><i class="ph ph-list"></i></label>
+      <nav class="breadcrumb">
+        <i class="ph ph-house"></i> <span>Coleta</span>
+        <i class="ph ph-caret-right"></i> <strong>Folha de Processo · OS-2864</strong>
+      </nav>
+      <div class="user-chip">
+        <div class="avatar">JS</div>
+        <div>
+          <div style="font-weight:700;color:#0f172a">Jaime Souza</div>
+          <div style="font-size:11px">Líder de Produção · Turno A</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Folha de Processo · OS-2864</h1>
+          <div class="page-subtitle">Traveler digital · digitaliza o <strong>FR015 Rev.11</strong> · acompanha o lote do recebimento à inspeção final</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="ph ph-printer"></i> Imprimir</button>
+          <button class="btn btn-secondary"><i class="ph ph-floppy-disk"></i> Salvar</button>
+          <button class="btn btn-primary"><i class="ph-fill ph-arrow-right"></i> Avançar etapa</button>
+        </div>
+      </div>
+
+      <!-- STEPPER -->
+      <div class="traveler-steps">
+        <div class="traveler-step done">
+          <div class="dot"><i class="ph-fill ph-check"></i></div>
+          <div class="label">1 · Recebimento</div>
+        </div>
+        <div class="traveler-step done">
+          <div class="dot"><i class="ph-fill ph-check"></i></div>
+          <div class="label">2 · Pré-tratamento</div>
+        </div>
+        <div class="traveler-step done">
+          <div class="dot"><i class="ph-fill ph-check"></i></div>
+          <div class="label">3 · Receita Base</div>
+        </div>
+        <div class="traveler-step current">
+          <div class="dot">4</div>
+          <div class="label">4 · Receita Top</div>
+        </div>
+        <div class="traveler-step">
+          <div class="dot">5</div>
+          <div class="label">5 · Inspeção Final</div>
+        </div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="card">
+        <div class="card-title"><i class="ph-fill ph-identification-card"></i> Identificação · OF/OP-2864</div>
+        <div class="grid-4">
+          <div class="form-row"><label>Pedido</label><input type="text" value="PD-9921"></div>
+          <div class="form-row"><label>Item</label><input type="text" value="03"></div>
+          <div class="form-row"><label>Sequência</label><input type="text" value="07/12"></div>
+          <div class="form-row"><label>Emissão</label><input type="date" value="2026-05-18"></div>
+          <div class="form-row"><label>Cliente</label><input type="text" value="Parafusos Brasil Ltda."></div>
+          <div class="form-row"><label>Qtde</label><input type="text" value="14.200 pç"></div>
+          <div class="form-row"><label>Produto</label><input type="text" value="Porca flangeada M10"></div>
+          <div class="form-row"><label>Código Nivard</label><input type="text" value="NV-GEO-1140"></div>
+          <div class="form-row"><label>Lote (Kg)</label><input type="text" value="LT-7748 · 380 Kg"></div>
+          <div class="form-row"><label>N.F.</label><input type="text" value="NF 18.451"></div>
+          <div class="form-row"><label>OF/OP</label><input type="text" value="2864"></div>
+          <div class="form-row"><label>Vol.</label><input type="text" value="2,4 m³"></div>
+          <div class="form-row"><label>Norma</label><input type="text" value="ISO 10683 · Geomet 321"></div>
+          <div class="form-row"><label>Camada Mín / Máx (µm)</label><input type="text" value="8 / 14"></div>
+          <div class="form-row"><label>Salt Spray (h)</label><input type="text" value="720"></div>
+          <div class="form-row"><label>Data início</label><input type="date" value="2026-05-21"></div>
+        </div>
+        <div class="form-row" style="margin-top:14px">
+          <label>Observações</label>
+          <textarea>Cliente solicitou prioridade. Camada-alvo 11 µm. Lote sensível — atenção ao desplacamento (TS-02) reportado no lote anterior.</textarea>
+        </div>
+      </div>
+
+      <!-- INSPEÇÃO DE RECEBIMENTO -->
+      <div class="card">
+        <div class="card-title"><i class="ph-fill ph-package"></i> 1 · Inspeção de Recebimento</div>
+        <div class="grid-3" style="align-items:end">
+          <div class="form-row">
+            <label>Resultado</label>
+            <div class="ar-toggle">
+              <span class="a on">Aprovado</span>
+              <span class="r">Reprovado</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Inspetor</label>
+            <input type="text" value="Carla Mendes">
+          </div>
+          <div class="form-row">
+            <label>Data / Hora</label>
+            <input type="datetime-local" value="2026-05-21T07:42">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:12px">
+          <label>Observações do recebimento</label>
+          <textarea style="min-height:50px">Material em embalagem original do cliente. Sem indícios de oxidação superficial.</textarea>
+        </div>
+      </div>
+
+      <!-- PRÉ-TRATAMENTO -->
+      <div class="card">
+        <div class="card-title"><i class="ph-fill ph-shower"></i> 2 · Pré-tratamento</div>
+
+        <div class="grid-2" style="align-items:end; margin-bottom:14px">
+          <div class="form-row">
+            <label>LIMPEZA</label>
+            <div class="ar-toggle">
+              <span class="a on">Alcalina</span>
+              <span class="r">Queima</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Recibo / Receita pré-tratamento</label>
+            <input type="text" value="REC-PRE-2864 · ciclo padrão Geomet">
+          </div>
+        </div>
+
+        <table class="process">
+          <thead>
+            <tr>
+              <th>Processo</th>
+              <th>Equip</th>
+              <th>Data</th>
+              <th>Hora Início</th>
+              <th>Teste Alcalino</th>
+              <th>T.Q. D'água</th>
+              <th>Amperagem</th>
+              <th>Tape Test</th>
+              <th>Hora Final</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Desengraxe</strong></td>
+              <td><input type="text" value="DES-02" style="width:80px"></td>
+              <td><input type="date" value="2026-05-21" style="width:130px"></td>
+              <td><input type="time" value="08:05" style="width:90px"></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="text" value="—" style="width:60px"></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="time" value="08:28" style="width:90px"></td>
+            </tr>
+            <tr>
+              <td><strong>Jato (granalha)</strong></td>
+              <td><input type="text" value="JT-01" style="width:80px"></td>
+              <td><input type="date" value="2026-05-21" style="width:130px"></td>
+              <td><input type="time" value="08:35" style="width:90px"></td>
+              <td><div class="mini-ar"><span class="a">Ap</span><span class="r">Rep</span></div></td>
+              <td><div class="mini-ar"><span class="a">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="text" value="—" style="width:60px"></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="time" value="09:12" style="width:90px"></td>
+            </tr>
+            <tr>
+              <td><strong>Decapagem</strong></td>
+              <td><input type="text" value="DC-03" style="width:80px"></td>
+              <td><input type="date" value="2026-05-21" style="width:130px"></td>
+              <td><input type="time" value="09:20" style="width:90px"></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><div class="mini-ar"><span class="a on">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="text" value="12,4 A" style="width:60px"></td>
+              <td><div class="mini-ar"><span class="a">Ap</span><span class="r">Rep</span></div></td>
+              <td><input type="time" value="09:55" style="width:90px"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-3" style="margin-top:14px; align-items:end">
+          <div class="form-row">
+            <label>Testes sulfato de cobre</label>
+            <div class="ar-toggle">
+              <span class="a on">OK</span>
+              <span class="r">N-OK</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Responsável pré-tratamento</label>
+            <input type="text" value="Edmar Pereira">
+          </div>
+          <div class="form-row">
+            <label>Hora fim</label>
+            <input type="time" value="10:02">
+          </div>
+        </div>
+      </div>
+
+      <!-- RECEITA BASE -->
+      <div class="card">
+        <div class="card-title">
+          <i class="ph-fill ph-paint-roller"></i> 3 · Receita Base — Geomet 321 Base
+          <span class="bath-pill" style="margin-left:auto"><i class="ph ph-link"></i> Banho T-04 · BC-4470 · Aprov.</span>
+        </div>
+
+        <!-- Aplicação 1 -->
+        <div class="application">
+          <div class="application-head">
+            <div class="title"><span class="num">1</span>Aplicação Base — 1ª camada</div>
+            <span class="status ok"><i class="ph ph-check"></i> Concluída</span>
+          </div>
+          <div class="grid-4">
+            <div class="form-row"><label>Linha</label><input type="text" value="L-01"></div>
+            <div class="form-row"><label>Equip. centrífuga</label><input type="text" value="CF-2200"></div>
+            <div class="form-row"><label>Vel. centrífuga (rpm)</label><input type="number" value="320"></div>
+            <div class="form-row"><label>Viscosidade (s)</label><input type="number" value="38" step="0.1"></div>
+            <div class="form-row"><label>Data</label><input type="date" value="2026-05-21"></div>
+            <div class="form-row"><label>Hora Início</label><input type="time" value="10:18"></div>
+            <div class="form-row"><label>Hora Fim</label><input type="time" value="10:46"></div>
+            <div class="form-row">
+              <label>Resultado</label>
+              <div class="ar-toggle"><span class="a on">Aprov.</span><span class="r">Rep.</span></div>
+            </div>
+            <div class="form-row"><label>Operador início</label><input type="text" value="Leonardo Matos"></div>
+            <div class="form-row"><label>Ajudante</label><input type="text" value="Bruno Lima"></div>
+            <div class="form-row"><label>Operador fim</label><input type="text" value="Leonardo Matos"></div>
+            <div class="form-row"><label>Ajudante fim</label><input type="text" value="Bruno Lima"></div>
+          </div>
+          <div class="estufa-grid">
+            <div class="lbl"><i class="ph-fill ph-thermometer-hot"></i> Estufa °C</div>
+            <div class="zone"><div class="zlbl">Zona 1</div><div class="zval"><input type="number" value="120"></div></div>
+            <div class="zone"><div class="zlbl">Zona 2</div><div class="zval"><input type="number" value="180"></div></div>
+            <div class="zone"><div class="zlbl">Zona 3</div><div class="zval"><input type="number" value="320"></div></div>
+            <div class="zone"><div class="zlbl">Zona 4</div><div class="zval"><input type="number" value="280"></div></div>
+          </div>
+        </div>
+
+        <!-- Aplicação 2 -->
+        <div class="application">
+          <div class="application-head">
+            <div class="title"><span class="num">2</span>Aplicação Base — 2ª camada</div>
+            <span class="status ok"><i class="ph ph-check"></i> Concluída</span>
+          </div>
+          <div class="grid-4">
+            <div class="form-row"><label>Linha</label><input type="text" value="L-01"></div>
+            <div class="form-row"><label>Equip. centrífuga</label><input type="text" value="CF-2200"></div>
+            <div class="form-row"><label>Vel. centrífuga (rpm)</label><input type="number" value="310"></div>
+            <div class="form-row"><label>Viscosidade (s)</label><input type="number" value="37" step="0.1"></div>
+            <div class="form-row"><label>Data</label><input type="date" value="2026-05-21"></div>
+            <div class="form-row"><label>Hora Início</label><input type="time" value="11:14"></div>
+            <div class="form-row"><label>Hora Fim</label><input type="time" value="11:42"></div>
+            <div class="form-row">
+              <label>Resultado</label>
+              <div class="ar-toggle"><span class="a on">Aprov.</span><span class="r">Rep.</span></div>
+            </div>
+            <div class="form-row"><label>Operador início</label><input type="text" value="Leonardo Matos"></div>
+            <div class="form-row"><label>Ajudante</label><input type="text" value="Bruno Lima"></div>
+            <div class="form-row"><label>Operador fim</label><input type="text" value="Leonardo Matos"></div>
+            <div class="form-row"><label>Ajudante fim</label><input type="text" value="Bruno Lima"></div>
+          </div>
+          <div class="estufa-grid">
+            <div class="lbl"><i class="ph-fill ph-thermometer-hot"></i> Estufa °C</div>
+            <div class="zone"><div class="zlbl">Zona 1</div><div class="zval"><input type="number" value="125"></div></div>
+            <div class="zone"><div class="zlbl">Zona 2</div><div class="zval"><input type="number" value="185"></div></div>
+            <div class="zone"><div class="zlbl">Zona 3</div><div class="zval"><input type="number" value="325"></div></div>
+            <div class="zone"><div class="zlbl">Zona 4</div><div class="zval"><input type="number" value="285"></div></div>
+          </div>
+        </div>
+
+        <!-- Aplicação 3 -->
+        <div class="application">
+          <div class="application-head">
+            <div class="title"><span class="num">3</span>Aplicação Base — 3ª camada (opcional)</div>
+            <span class="status neutral">— não aplicada</span>
+          </div>
+          <div class="grid-4">
+            <div class="form-row"><label>Linha</label><input type="text" placeholder="—"></div>
+            <div class="form-row"><label>Equip. centrífuga</label><input type="text" placeholder="—"></div>
+            <div class="form-row"><label>Vel. centrífuga (rpm)</label><input type="number" placeholder="—"></div>
+            <div class="form-row"><label>Viscosidade (s)</label><input type="number" placeholder="—"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECEITA TOP -->
+      <div class="card">
+        <div class="card-title">
+          <i class="ph-fill ph-paint-brush"></i> 4 · Receita Top — Geomet 321 Top Coat
+          <span class="bath-pill" style="margin-left:auto"><i class="ph ph-link"></i> Banho T-05 · TC-3318 · Aprov.</span>
+        </div>
+
+        <!-- Aplicação 1 (current) -->
+        <div class="application" style="border-color:#2563eb; background:#eff6ff">
+          <div class="application-head">
+            <div class="title"><span class="num">1</span>Aplicação Top — 1ª camada</div>
+            <span class="status info"><i class="ph ph-spinner"></i> Em andamento</span>
+          </div>
+          <div class="grid-4">
+            <div class="form-row"><label>Linha</label><input type="text" value="L-02"></div>
+            <div class="form-row"><label>Equip. centrífuga</label><input type="text" value="CF-2300"></div>
+            <div class="form-row"><label>Vel. centrífuga (rpm)</label><input type="number" value="290"></div>
+            <div class="form-row"><label>Viscosidade (s)</label><input type="number" value="32" step="0.1"></div>
+            <div class="form-row"><label>Data</label><input type="date" value="2026-05-21"></div>
+            <div class="form-row"><label>Hora Início</label><input type="time" value="13:08"></div>
+            <div class="form-row"><label>Hora Fim</label><input type="time" placeholder="—"></div>
+            <div class="form-row">
+              <label>Resultado</label>
+              <div class="ar-toggle"><span class="a">Aprov.</span><span class="r">Rep.</span></div>
+            </div>
+            <div class="form-row"><label>Operador início</label><input type="text" value="Leonardo Matos"></div>
+            <div class="form-row"><label>Ajudante</label><input type="text" value="Wesley Souza"></div>
+            <div class="form-row"><label>Operador fim</label><input type="text" placeholder="—"></div>
+            <div class="form-row"><label>Ajudante fim</label><input type="text" placeholder="—"></div>
+          </div>
+          <div class="estufa-grid">
+            <div class="lbl"><i class="ph-fill ph-thermometer-hot"></i> Estufa °C</div>
+            <div class="zone"><div class="zlbl">Zona 1</div><div class="zval"><input type="number" value="115"></div></div>
+            <div class="zone"><div class="zlbl">Zona 2</div><div class="zval"><input type="number" value="175"></div></div>
+            <div class="zone"><div class="zlbl">Zona 3</div><div class="zval"><input type="number" value="290"></div></div>
+            <div class="zone"><div class="zlbl">Zona 4</div><div class="zval"><input type="number" value="240"></div></div>
+          </div>
+        </div>
+
+        <!-- Aplicação 2 (pendente) -->
+        <div class="application">
+          <div class="application-head">
+            <div class="title"><span class="num">2</span>Aplicação Top — 2ª camada</div>
+            <span class="status neutral">Aguardando início</span>
+          </div>
+          <div class="grid-4">
+            <div class="form-row"><label>Linha</label><input type="text" placeholder="—"></div>
+            <div class="form-row"><label>Equip. centrífuga</label><input type="text" placeholder="—"></div>
+            <div class="form-row"><label>Vel. centrífuga (rpm)</label><input type="number" placeholder="—"></div>
+            <div class="form-row"><label>Viscosidade (s)</label><input type="number" placeholder="—"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSPEÇÃO FINAL (resumo + link para o laudo) -->
+      <div class="card">
+        <div class="card-title">
+          <i class="ph-fill ph-test-tube"></i> 5 · Inspeção Final
+          <span class="status neutral" style="margin-left:auto">Pendente — abrir após Top</span>
+        </div>
+        <div class="banner info">
+          <i class="ph-fill ph-info"></i>
+          <div>
+            <strong>Inspeção final é registrada no Laudo Final por OS</strong>
+            <span>O laudo digitaliza esta seção do FR015 (camada multi-ponto, tape test, sulfato de cobre, código de rejeição TS-01…TS-20 e destino do não conforme). Clique abaixo para abri-lo quando a aplicação Top estiver concluída.</span>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:10px;">
+          <a href="02-laudo-final.html" class="btn btn-primary"><i class="ph-fill ph-arrow-right"></i> Abrir Laudo Final</a>
+          <button class="btn btn-secondary" disabled style="opacity:.5;cursor:not-allowed"><i class="ph ph-camera"></i> Anexar fotos do lote</button>
+        </div>
+      </div>
+
+      <!-- ASSINATURA / RASTREABILIDADE -->
+      <div class="grid-2" style="grid-template-columns: 2fr 1fr">
+        <div class="card">
+          <div class="card-title"><i class="ph-fill ph-fingerprint"></i> Rastreabilidade · vínculos no ERP</div>
+          <table class="data">
+            <tbody>
+              <tr><td>Folha de Processo</td><td><span class="tag"><i class="ph ph-link"></i> k20FolhaProcesso</span> · <strong>FR015-2864</strong></td></tr>
+              <tr><td>Banho Base</td><td><strong>T-04 · BC-4470</strong> &nbsp;<span class="status ok">Aprov.</span> · análise FR049 21/05 06:12</td></tr>
+              <tr><td>Banho Top</td><td><strong>T-05 · TC-3318</strong> &nbsp;<span class="status ok">Aprov.</span> · análise FR049 21/05 12:48</td></tr>
+              <tr><td>Programação PCP</td><td><a href="08-programacao-pcp.html" style="color:#2563eb;text-decoration:none"><i class="ph ph-arrow-square-out"></i> FR019 · 21/05/2026</a></td></tr>
+              <tr><td>Laudo Final</td><td><a href="02-laudo-final.html" style="color:#2563eb;text-decoration:none"><i class="ph ph-arrow-square-out"></i> Pendente — abrir após Top</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="ph-fill ph-clock"></i> Linha do tempo</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:#475569">
+            <div><strong style="color:#047857">07:42</strong> · Recebimento aprovado (Carla Mendes)</div>
+            <div><strong style="color:#047857">08:05 → 10:02</strong> · Pré-tratamento concluído</div>
+            <div><strong style="color:#047857">10:18 → 11:42</strong> · Receita Base (2 aplicações)</div>
+            <div><strong style="color:#2563eb">13:08</strong> · Receita Top — 1ª camada (em andamento)</div>
+            <div><strong style="color:#94a3b8">—</strong> · Receita Top — 2ª camada</div>
+            <div><strong style="color:#94a3b8">—</strong> · Inspeção Final</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

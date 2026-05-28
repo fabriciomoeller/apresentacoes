@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Programação Diária PCP (FR019) · Qualidade Nivard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Linha drag handle */
+    .row-handle { color: #cbd5e1; cursor: grab; }
+    .row-handle:hover { color: #2563eb; }
+
+    /* Tratamento como badge colorida */
+    .treat { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+    .treat.geomet { background: #dbeafe; color: #1d4ed8; }
+    .treat.geoblack { background: #1e293b; color: #fff; }
+    .treat.zinc { background: #f3e8ff; color: #7e22ce; }
+    .treat.deltatone { background: #fef3c7; color: #92400e; }
+
+    /* Checkbox de etapa concluída */
+    .step-cell { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: #94a3b8; cursor: pointer; }
+    .step-cell.done { background: #10b981; border-color: #10b981; color: #fff; }
+    .step-cell.in-progress { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .step-cell.pending { background: #fff; }
+
+    /* Resumo por linha de produção */
+    .line-summary { display: flex; align-items: center; gap: 12px; padding: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; }
+    .line-summary .line-name { font-size: 12px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .06em; min-width: 60px; }
+    .line-summary .line-progress { flex: 1; height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+    .line-summary .line-progress .fill { height: 100%; border-radius: 999px; }
+    .line-summary .line-fill-base { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+    .line-summary .line-fill-top { background: linear-gradient(90deg, #c026d3, #f0abfc); }
+    .line-summary .line-fill-done { background: #10b981; }
+    .line-summary .line-stats { font-size: 12px; color: #475569; font-weight: 700; min-width: 110px; text-align: right; }
+
+    /* Filtros */
+    .filter-bar { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .filter-bar .chip { padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid transparent; }
+    .filter-bar .chip.active { background: #eff6ff; color: #2563eb; border-color: #93c5fd; }
+    .filter-bar .chip:hover { background: #e2e8f0; }
+
+    table.programacao { font-size: 12px; }
+    table.programacao thead th { font-size: 10px; padding: 8px 6px; }
+    table.programacao tbody td { padding: 8px 6px; }
+    table.programacao tbody tr.priority-high td:first-child { box-shadow: inset 3px 0 0 #e11d48; }
+    table.programacao tbody tr.priority-medium td:first-child { box-shadow: inset 3px 0 0 #f59e0b; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <label for="nav-toggle" class="nav-close-btn" aria-label="Fechar menu"><i class="ph ph-x"></i></label>
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Qualidade Nivard</div>
+        <div class="brand-sub">Datainfo M3 · Web</div>
+      </div>
+    </div>
+    <div class="nav-section">Coleta · Pacote Inicial</div>
+    <a href="01-controle-banho.html" class="nav-item"><i class="ph-fill ph-flask"></i> Banho + Liberação</a>
+    <a href="02-laudo-final.html" class="nav-item"><i class="ph-fill ph-test-tube"></i> Laudo Final</a>
+    <a href="03-nao-conformidade.html" class="nav-item"><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</a>
+    <a href="04-certificado.html" class="nav-item"><i class="ph-fill ph-certificate"></i> Certificado</a>
+    <div class="nav-section">Coleta · Fase 2</div>
+    <a href="05-folha-processo.html" class="nav-item"><i class="ph-fill ph-file-text"></i> Folha de Processo</a>
+    <a href="06-salt-spray-parametros.html" class="nav-item"><i class="ph-fill ph-drop"></i> SST · Parâmetros</a>
+    <a href="07-salt-spray-pecas.html" class="nav-item"><i class="ph-fill ph-cube"></i> SST · Peças</a>
+    <a href="08-programacao-pcp.html" class="nav-item active"><i class="ph-fill ph-calendar"></i> Programação PCP</a>
+    <div class="nav-section">Painéis</div>
+    <a href="#" class="nav-item"><i class="ph ph-chart-line"></i> Dashboard</a>
+    <a href="#" class="nav-item"><i class="ph ph-list-checks"></i> NCs abertas</a>
+    <a href="index.html" class="nav-item" style="margin-top:auto"><i class="ph ph-arrow-left"></i> Voltar à demo</a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <label for="nav-toggle" class="nav-open-btn" aria-label="Abrir menu"><i class="ph ph-list"></i></label>
+      <nav class="breadcrumb">
+        <i class="ph ph-house"></i> <span>Produção</span>
+        <i class="ph ph-caret-right"></i> <strong>Programação Diária · 21/05/2026</strong>
+      </nav>
+      <div class="user-chip">
+        <div class="avatar">JS</div>
+        <div>
+          <div style="font-weight:700;color:#0f172a">Jaime Souza</div>
+          <div style="font-size:11px">Líder de Produção · PCP</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Programação Diária · 21/05/2026</h1>
+          <div class="page-subtitle">Sequenciamento do PCP · digitaliza o <strong>FR019 Rev.03</strong> · 14 OS programadas</div>
+        </div>
+        <div class="page-actions">
+          <input type="date" value="2026-05-21" style="max-width:160px">
+          <button class="btn btn-secondary"><i class="ph ph-printer"></i> Imprimir</button>
+          <button class="btn btn-primary"><i class="ph-fill ph-plus-circle"></i> Nova OS no plano</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="grid-4" style="margin-bottom:18px">
+        <div class="kpi">
+          <div class="kpi-label">OS programadas hoje</div>
+          <div class="kpi-value">14</div>
+          <div class="kpi-trend">~ 4.820 Kg total</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Em andamento</div>
+          <div class="kpi-value ok">6</div>
+          <div class="kpi-trend"><i class="ph ph-arrow-up" style="color:#10b981"></i> 43% concluídas</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Aguardando liberação banho</div>
+          <div class="kpi-value warn">2</div>
+          <div class="kpi-trend">T-04 reprovado · 1 OS bloqueada</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Peça pronta (turno A)</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-trend">prontas para laudo</div>
+        </div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="filter-bar">
+        <i class="ph ph-funnel" style="color:#64748b"></i>
+        <span style="font-size:12px; font-weight:800; color:#475569; margin-right:6px">Filtros:</span>
+        <span class="chip active">Todos · 14</span>
+        <span class="chip">Geomet 321 · 8</span>
+        <span class="chip">Geoblack · 3</span>
+        <span class="chip">Zinc Flake · 2</span>
+        <span class="chip">Deltatone · 1</span>
+        <span style="width:1px;height:24px;background:#e2e8f0;margin:0 6px"></span>
+        <span class="chip">L-01 · 5</span>
+        <span class="chip">L-02 · 6</span>
+        <span class="chip">L-03 · 3</span>
+        <span style="margin-left:auto; font-size:12px; color:#64748b">Última atualização: <strong>há 3 min</strong></span>
+      </div>
+
+      <!-- RESUMO POR LINHA -->
+      <div class="grid-3" style="margin-bottom:18px; gap:12px">
+        <div class="line-summary">
+          <div class="line-name"><i class="ph-fill ph-line-vertical" style="color:#2563eb"></i> L-01</div>
+          <div style="flex:1">
+            <div style="font-size:11px; color:#64748b; font-weight:700; margin-bottom:4px;">5 OS · 1.840 Kg · 60% concluído</div>
+            <div class="line-progress"><div class="fill line-fill-done" style="width:60%"></div></div>
+          </div>
+          <div class="line-stats">3 ok · 1 prod · 1 fila</div>
+        </div>
+        <div class="line-summary">
+          <div class="line-name"><i class="ph-fill ph-line-vertical" style="color:#c026d3"></i> L-02</div>
+          <div style="flex:1">
+            <div style="font-size:11px; color:#64748b; font-weight:700; margin-bottom:4px;">6 OS · 2.180 Kg · 33% concluído</div>
+            <div class="line-progress"><div class="fill line-fill-base" style="width:33%"></div></div>
+          </div>
+          <div class="line-stats">2 ok · 3 prod · 1 fila</div>
+        </div>
+        <div class="line-summary">
+          <div class="line-name"><i class="ph-fill ph-line-vertical" style="color:#f59e0b"></i> L-03</div>
+          <div style="flex:1">
+            <div style="font-size:11px; color:#64748b; font-weight:700; margin-bottom:4px;">3 OS · 800 Kg · 0% iniciado</div>
+            <div class="line-progress"><div class="fill line-fill-top" style="width:0%"></div></div>
+          </div>
+          <div class="line-stats">0 ok · 0 prod · 3 fila</div>
+        </div>
+      </div>
+
+      <!-- TABELA DE PROGRAMAÇÃO -->
+      <div class="card">
+        <div class="card-title">
+          <i class="ph-fill ph-list-numbers"></i> Programação do turno A · 21/05/2026
+          <span style="margin-left:auto; font-size:11px; color:#94a3b8; font-weight:600">Arraste pelo ícone <i class="ph ph-dots-six-vertical"></i> para reordenar prioridade</span>
+        </div>
+        <table class="data programacao">
+          <thead>
+            <tr>
+              <th width="24"></th>
+              <th>OF/OP</th>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Tipo</th>
+              <th>Peso (Kg)</th>
+              <th>Tratamento</th>
+              <th>Controle</th>
+              <th>NF</th>
+              <th>Dt. Emissão</th>
+              <th title="Jateamento" style="text-align:center">Jato</th>
+              <th title="Base coat" style="text-align:center">Base</th>
+              <th title="Top coat" style="text-align:center">Top</th>
+              <th title="Camada conferida" style="text-align:center">Camada</th>
+              <th title="Peça pronta para laudo" style="text-align:center">Pronta</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="priority-high">
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2864</strong></td>
+              <td>Parafusos Brasil</td>
+              <td>Porca flangeada M10</td>
+              <td>Porca</td>
+              <td>380</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>03/12</td>
+              <td>18.451</td>
+              <td>18/05</td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell in-progress"><i class="ph ph-spinner"></i></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status info">Em produção</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2861</strong></td>
+              <td>AutoParts SA</td>
+              <td>Parafuso sextavado M8</td>
+              <td>Parafuso</td>
+              <td>420</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>07/15</td>
+              <td>18.442</td>
+              <td>17/05</td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td><span class="status ok">Pronta · laudo</span></td>
+            </tr>
+            <tr class="priority-medium">
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2867</strong></td>
+              <td>AutoParts SA</td>
+              <td>Arruela DIN 125 · 16mm</td>
+              <td>Arruela</td>
+              <td>280</td>
+              <td><span class="treat geoblack">Geoblack</span></td>
+              <td>04/04</td>
+              <td>18.460</td>
+              <td>20/05</td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status warn"><i class="ph ph-lock"></i> Banho aguardando</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2870</strong></td>
+              <td>Indústria Krauss</td>
+              <td>Prisioneiro M12 × 80</td>
+              <td>Prisioneiro</td>
+              <td>520</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>02/06</td>
+              <td>18.466</td>
+              <td>20/05</td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell in-progress"><i class="ph ph-spinner"></i></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status info">Em produção</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2872</strong></td>
+              <td>Ferrari Componentes</td>
+              <td>Porca sextavada M14</td>
+              <td>Porca</td>
+              <td>340</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>06/10</td>
+              <td>18.470</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell done"><i class="ph ph-check"></i></span></td>
+              <td style="text-align:center"><span class="step-cell in-progress"><i class="ph ph-spinner"></i></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status info">Conferência camada</span></td>
+            </tr>
+            <tr class="priority-high">
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2874</strong></td>
+              <td>Parafusos Brasil</td>
+              <td>Anel elástico 22mm</td>
+              <td>Anel</td>
+              <td>180</td>
+              <td><span class="treat zinc">Zinc Flake</span></td>
+              <td>01/03</td>
+              <td>18.473</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2875</strong></td>
+              <td>SteelCorp</td>
+              <td>Parafuso allen M6</td>
+              <td>Parafuso</td>
+              <td>240</td>
+              <td><span class="treat deltatone">Deltatone</span></td>
+              <td>08/12</td>
+              <td>18.476</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2876</strong></td>
+              <td>MetalForge</td>
+              <td>Bucha sextavada M10</td>
+              <td>Bucha</td>
+              <td>320</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>05/09</td>
+              <td>18.478</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2878</strong></td>
+              <td>Mahle Componentes</td>
+              <td>Tampa de freio</td>
+              <td>Especial</td>
+              <td>620</td>
+              <td><span class="treat geoblack">Geoblack</span></td>
+              <td>09/12</td>
+              <td>18.481</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2880</strong></td>
+              <td>Bosch Brasil</td>
+              <td>Parafuso flangeado M8 × 25</td>
+              <td>Parafuso</td>
+              <td>410</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>03/08</td>
+              <td>18.484</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2882</strong></td>
+              <td>ZF Sachs</td>
+              <td>Anel de pressão 18mm</td>
+              <td>Anel</td>
+              <td>290</td>
+              <td><span class="treat zinc">Zinc Flake</span></td>
+              <td>02/05</td>
+              <td>18.488</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+            <tr>
+              <td><i class="ph ph-dots-six-vertical row-handle"></i></td>
+              <td><strong>2885</strong></td>
+              <td>Aethra Stamping</td>
+              <td>Suporte de cinto</td>
+              <td>Especial</td>
+              <td>720</td>
+              <td><span class="treat geomet">Geomet 321</span></td>
+              <td>01/02</td>
+              <td>18.490</td>
+              <td>21/05</td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td style="text-align:center"><span class="step-cell pending"></span></td>
+              <td><span class="status neutral">Em fila</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:14px; border-top:1px solid #f1f5f9;">
+          <div style="font-size:12px; color:#64748b">
+            Mostrando <strong>12 de 14</strong> OS · <strong>4.420 Kg</strong> programados ·
+            <span class="status ok" style="margin-left:6px">3 prontas</span>
+            <span class="status info" style="margin-left:4px">3 em produção</span>
+            <span class="status warn" style="margin-left:4px">1 bloqueada</span>
+          </div>
+          <div style="display:flex; gap:8px">
+            <button class="btn btn-secondary"><i class="ph ph-arrow-down"></i> Carregar mais</button>
+            <button class="btn btn-primary"><i class="ph-fill ph-floppy-disk"></i> Salvar programação</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTEGRAÇÃO -->
+      <div class="card" style="margin-top:18px">
+        <div class="card-title"><i class="ph-fill ph-link"></i> Integração com o ERP</div>
+        <div class="banner info">
+          <i class="ph-fill ph-info"></i>
+          <div>
+            <strong>OS originadas no módulo Produção do ERP Datainfo M3</strong>
+            <span>A programação do PCP consome as OS abertas no ERP e alimenta automaticamente a <a href="05-folha-processo.html" style="color:#1d4ed8;font-weight:700">Folha de Processo (FR015)</a> de cada lote. Reordenação aqui é refletida em tempo real para o chão de fábrica.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

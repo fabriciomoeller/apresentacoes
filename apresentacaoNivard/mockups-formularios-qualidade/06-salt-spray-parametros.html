@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Salt Spray · Parâmetros (FR045) · Qualidade Nivard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Toggle de câmara SST1/SST2 */
+    .chamber-tabs { display: inline-flex; border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #fff; }
+    .chamber-tabs span { padding: 12px 22px; font-size: 13px; font-weight: 800; cursor: pointer; color: #64748b; display: flex; align-items: center; gap: 8px; }
+    .chamber-tabs span.on { background: linear-gradient(135deg, #2563eb, #c026d3); color: #fff; }
+    .chamber-tabs i { font-size: 18px; }
+
+    /* Card de parâmetro com gauge linear */
+    .param-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+    .param-card .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .param-card .name { font-size: 12px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .04em; }
+    .param-card .range { font-size: 11px; color: #64748b; }
+    .param-card .value { font-size: 26px; font-weight: 900; color: #0f172a; line-height: 1; margin: 6px 0; }
+    .param-card .unit { font-size: 13px; color: #64748b; font-weight: 700; margin-left: 4px; }
+    .param-card input { width: 100%; padding: 8px 10px; font-size: 22px; font-weight: 900; border: 1px solid #cbd5e1; border-radius: 8px; text-align: center; }
+
+    .gauge { position: relative; height: 8px; border-radius: 999px; background: linear-gradient(90deg, #fee2e2 0%, #fef3c7 20%, #d1fae5 35%, #d1fae5 65%, #fef3c7 80%, #fee2e2 100%); margin-top: 8px; }
+    .gauge .marker { position: absolute; top: -3px; width: 4px; height: 14px; background: #0f172a; border-radius: 2px; box-shadow: 0 0 0 2px #fff; }
+    .gauge .min, .gauge .max { position: absolute; top: 14px; font-size: 9px; color: #94a3b8; font-weight: 700; }
+    .gauge .min { left: 0; }
+    .gauge .max { right: 0; }
+
+    .param-card.ok { border-color: #86efac; }
+    .param-card.warn { border-color: #fcd34d; background: #fffbeb; }
+    .param-card.danger { border-color: #fca5a5; background: #fef2f2; }
+
+    /* Mini calculadora vazão */
+    .calc { background: linear-gradient(135deg, #0f172a, #1e293b); color: #e2e8f0; border-radius: 12px; padding: 20px; }
+    .calc .calc-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #93c5fd; margin-bottom: 12px; }
+    .calc .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .calc label { font-size: 11px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 4px; }
+    .calc input { background: #0f172a; border: 1px solid #334155; color: #fff; padding: 8px 10px; border-radius: 6px; font-size: 14px; width: 100%; font-weight: 700; }
+    .calc .result { background: rgba(37,99,235,.15); border: 1px solid #2563eb; border-radius: 8px; padding: 10px 14px; margin-top: 10px; }
+    .calc .result-label { font-size: 10px; color: #93c5fd; font-weight: 800; text-transform: uppercase; }
+    .calc .result-value { font-size: 22px; font-weight: 900; color: #fff; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <label for="nav-toggle" class="nav-close-btn" aria-label="Fechar menu"><i class="ph ph-x"></i></label>
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Qualidade Nivard</div>
+        <div class="brand-sub">Datainfo M3 · Web</div>
+      </div>
+    </div>
+    <div class="nav-section">Coleta · Pacote Inicial</div>
+    <a href="01-controle-banho.html" class="nav-item"><i class="ph-fill ph-flask"></i> Banho + Liberação</a>
+    <a href="02-laudo-final.html" class="nav-item"><i class="ph-fill ph-test-tube"></i> Laudo Final</a>
+    <a href="03-nao-conformidade.html" class="nav-item"><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</a>
+    <a href="04-certificado.html" class="nav-item"><i class="ph-fill ph-certificate"></i> Certificado</a>
+    <div class="nav-section">Coleta · Fase 2</div>
+    <a href="05-folha-processo.html" class="nav-item"><i class="ph-fill ph-file-text"></i> Folha de Processo</a>
+    <a href="06-salt-spray-parametros.html" class="nav-item active"><i class="ph-fill ph-drop"></i> SST · Parâmetros</a>
+    <a href="07-salt-spray-pecas.html" class="nav-item"><i class="ph-fill ph-cube"></i> SST · Peças</a>
+    <a href="08-programacao-pcp.html" class="nav-item"><i class="ph-fill ph-calendar"></i> Programação PCP</a>
+    <div class="nav-section">Painéis</div>
+    <a href="#" class="nav-item"><i class="ph ph-chart-line"></i> Dashboard</a>
+    <a href="#" class="nav-item"><i class="ph ph-list-checks"></i> NCs abertas</a>
+    <a href="index.html" class="nav-item" style="margin-top:auto"><i class="ph ph-arrow-left"></i> Voltar à demo</a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <label for="nav-toggle" class="nav-open-btn" aria-label="Abrir menu"><i class="ph ph-list"></i></label>
+      <nav class="breadcrumb">
+        <i class="ph ph-house"></i> <span>Coleta</span>
+        <i class="ph ph-caret-right"></i> <strong>Salt Spray · Parâmetros</strong>
+      </nav>
+      <div class="user-chip">
+        <div class="avatar">RA</div>
+        <div>
+          <div style="font-weight:700;color:#0f172a">Renata Alves</div>
+          <div style="font-size:11px">Inspetora QA · Laboratório</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Parâmetros das Câmaras Salt Spray</h1>
+          <div class="page-subtitle">Controle diário do equipamento · digitaliza o <strong>FR045 Rev.03</strong> · 21/05/2026</div>
+        </div>
+        <div class="page-actions">
+          <div class="chamber-tabs">
+            <span class="on"><i class="ph-fill ph-drop"></i> SST1</span>
+            <span><i class="ph ph-drop"></i> SST2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs gerais -->
+      <div class="grid-4" style="margin-bottom:18px">
+        <div class="kpi">
+          <div class="kpi-label">Câmara ativa</div>
+          <div class="kpi-value ok">SST1</div>
+          <div class="kpi-trend"><i class="ph ph-check" style="color:#10b981"></i> em operação</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Ensaios em curso</div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-trend">corpos de prova · <a href="07-salt-spray-pecas.html" style="color:#2563eb">ver peças</a></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Parâmetros fora de faixa (24h)</div>
+          <div class="kpi-value warn">1</div>
+          <div class="kpi-trend">pH em alerta às 11h32</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Última calibração</div>
+          <div class="kpi-value" style="font-size:16px">07/05/2026</div>
+          <div class="kpi-trend">próxima em 14 dias</div>
+        </div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO DA LEITURA -->
+      <div class="card">
+        <div class="card-title"><i class="ph-fill ph-identification-card"></i> Leitura atual · SST1</div>
+        <div class="grid-4">
+          <div class="form-row">
+            <label>Data</label>
+            <input type="date" value="2026-05-21">
+          </div>
+          <div class="form-row">
+            <label>Hora</label>
+            <input type="time" value="11:32">
+          </div>
+          <div class="form-row">
+            <label>Equipamento</label>
+            <input type="text" value="SST1 · Q-Fog CCT-600">
+          </div>
+          <div class="form-row">
+            <label>Responsável</label>
+            <input type="text" value="Renata Alves">
+          </div>
+        </div>
+      </div>
+
+      <!-- PARÂMETROS -->
+      <div style="margin-top:18px; font-size:14px; font-weight:800; color:#0f172a; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+        <i class="ph-fill ph-gauge" style="color:#2563eb"></i> Parâmetros monitorados
+        <span style="font-weight:600; font-size:12px; color:#94a3b8">· faixas reais do FR045</span>
+      </div>
+      <div class="grid-4">
+
+        <!-- Vazão -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">Vazão</div>
+            <span class="status ok">OK</span>
+          </div>
+          <div class="range">faixa: 1 a 2 ml/h</div>
+          <div class="value">1.4<span class="unit">ml/h</span></div>
+          <div class="gauge">
+            <div class="marker" style="left:40%"></div>
+            <span class="min">1,0</span>
+            <span class="max">2,0</span>
+          </div>
+        </div>
+
+        <!-- pH -->
+        <div class="param-card warn">
+          <div class="head">
+            <div class="name">pH</div>
+            <span class="status warn">Alerta</span>
+          </div>
+          <div class="range">faixa: 6,5 a 7,2</div>
+          <div class="value">7.1<span class="unit"></span></div>
+          <div class="gauge">
+            <div class="marker" style="left:85%"></div>
+            <span class="min">6,5</span>
+            <span class="max">7,2</span>
+          </div>
+        </div>
+
+        <!-- T Câmara -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">T. Câmara</div>
+            <span class="status ok">OK</span>
+          </div>
+          <div class="range">faixa: 33 a 37 °C</div>
+          <div class="value">35.2<span class="unit">°C</span></div>
+          <div class="gauge">
+            <div class="marker" style="left:55%"></div>
+            <span class="min">33</span>
+            <span class="max">37</span>
+          </div>
+        </div>
+
+        <!-- Densidade -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">Densidade</div>
+            <span class="status ok">OK</span>
+          </div>
+          <div class="range">faixa: 1,02 a 1,04 g/ml</div>
+          <div class="value">1.03<span class="unit">g/ml</span></div>
+          <div class="gauge">
+            <div class="marker" style="left:50%"></div>
+            <span class="min">1,02</span>
+            <span class="max">1,04</span>
+          </div>
+        </div>
+
+        <!-- T Saturador -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">T. Saturador</div>
+            <span class="status ok">OK</span>
+          </div>
+          <div class="range">faixa: 45 a 49 °C</div>
+          <div class="value">47.0<span class="unit">°C</span></div>
+          <div class="gauge">
+            <div class="marker" style="left:50%"></div>
+            <span class="min">45</span>
+            <span class="max">49</span>
+          </div>
+        </div>
+
+        <!-- Pressão -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">Pressão</div>
+            <span class="status ok">OK</span>
+          </div>
+          <div class="range">faixa: 0,8 a 1,2 kgf/cm²</div>
+          <div class="value">1.0<span class="unit">kgf/cm²</span></div>
+          <div class="gauge">
+            <div class="marker" style="left:50%"></div>
+            <span class="min">0,8</span>
+            <span class="max">1,2</span>
+          </div>
+        </div>
+
+        <!-- NaCl -->
+        <div class="param-card ok">
+          <div class="head">
+            <div class="name">Solução</div>
+            <span class="status ok">Conforme</span>
+          </div>
+          <div class="range">padrão: NaCl 5 %</div>
+          <div class="value">NaCl<span class="unit">5 %</span></div>
+          <div class="gauge" style="background:linear-gradient(90deg,#d1fae5,#d1fae5); opacity:.6">
+            <div class="marker" style="left:50%"></div>
+          </div>
+        </div>
+
+        <!-- Status global -->
+        <div class="param-card" style="background:linear-gradient(135deg, #0f172a, #1e293b); border:0; color:#fff">
+          <div class="head">
+            <div class="name" style="color:#93c5fd">Status global</div>
+          </div>
+          <div class="range" style="color:#94a3b8">leitura registrada</div>
+          <div style="font-size:14px; font-weight:800; color:#fcd34d; display:flex; align-items:center; gap:6px; margin-top:8px">
+            <i class="ph-fill ph-warning-circle"></i> 1 parâmetro em alerta
+          </div>
+          <div style="font-size:11px; color:#cbd5e1; margin-top:6px; line-height:1.4">
+            pH no limite superior. Conferir solução do saturador.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LINHA 2: Calculadora + Diário de Bordo -->
+      <div class="grid-2" style="grid-template-columns: 1fr 1.8fr; gap: 18px; margin-top: 18px;">
+
+        <!-- Calculadora Volume → Vazão -->
+        <div class="calc">
+          <div class="calc-title"><i class="ph-fill ph-calculator"></i> Cálculo Volume → Vazão</div>
+          <div style="font-size:11px; color:#94a3b8; margin-bottom:12px; line-height:1.4">
+            Reproduz a aba "Calculo" do FR045: converte volume coletado em vazão (ml/h) automaticamente.
+          </div>
+          <div class="calc-row">
+            <div>
+              <label>Volume coletado (ml)</label>
+              <input type="number" value="22" step="0.1">
+            </div>
+            <div>
+              <label>Período (h)</label>
+              <input type="number" value="16" step="0.1">
+            </div>
+          </div>
+          <div class="result">
+            <div class="result-label">Vazão calculada</div>
+            <div class="result-value">1.38 ml/h</div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:12px; width:100%; justify-content:center"><i class="ph ph-arrow-right"></i> Usar como leitura</button>
+        </div>
+
+        <!-- Diário de Bordo -->
+        <div class="card">
+          <div class="card-title">
+            <i class="ph-fill ph-book-open"></i> Diário de Bordo · SST1
+            <button class="btn btn-secondary" style="margin-left:auto; padding:6px 12px; font-size:12px"><i class="ph ph-plus"></i> Nova ocorrência</button>
+          </div>
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Ocorrência</th>
+                <th>Ação tomada</th>
+                <th>Responsável</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>21/05 · 11:32</strong></td>
+                <td><span class="status warn"><i class="ph ph-warning"></i> pH 7,1 — limite superior</span></td>
+                <td>Adicionada solução-mãe NaCl 5% recém-preparada. Aguardar 2h e reler.</td>
+                <td>R. Alves</td>
+              </tr>
+              <tr>
+                <td><strong>19/05 · 08:14</strong></td>
+                <td>Reposição de solução salina (rotina)</td>
+                <td>10L de NaCl 5% adicionados ao reservatório.</td>
+                <td>R. Alves</td>
+              </tr>
+              <tr>
+                <td><strong>15/05 · 16:40</strong></td>
+                <td><span class="status danger"><i class="ph ph-x"></i> Pressão 1,3 kgf/cm² (fora)</span></td>
+                <td>Reajuste da válvula reguladora. Bloqueio do ensaio SST-1182 por 4h até reestabilizar.</td>
+                <td>J. Souza</td>
+              </tr>
+              <tr>
+                <td><strong>07/05 · 07:00</strong></td>
+                <td><span class="status info"><i class="ph ph-wrench"></i> Calibração</span></td>
+                <td>Calibração de pH, vazão e pressão por técnico externo. Certificado anexado.</td>
+                <td>R. Alves</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO DIÁRIO -->
+      <div class="card" style="margin-top: 18px">
+        <div class="card-title">
+          <i class="ph-fill ph-clock-counter-clockwise"></i> Histórico das últimas leituras · SST1
+          <button class="btn btn-ghost" style="margin-left:auto; padding:4px 10px; font-size:11px"><i class="ph ph-download-simple"></i> Exportar CSV</button>
+        </div>
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Data/Hora</th>
+              <th>Vazão (ml/h)</th>
+              <th>pH</th>
+              <th>T.Câmara (°C)</th>
+              <th>Densidade</th>
+              <th>T.Sat (°C)</th>
+              <th>Pressão</th>
+              <th>Status</th>
+              <th>Responsável</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#fffbeb">
+              <td><strong>21/05 11:32</strong></td>
+              <td>1,4</td>
+              <td style="color:#b45309;font-weight:700">7,1</td>
+              <td>35,2</td>
+              <td>1,03</td>
+              <td>47,0</td>
+              <td>1,0</td>
+              <td><span class="status warn"><i class="ph ph-warning"></i> Alerta</span></td>
+              <td>R. Alves</td>
+            </tr>
+            <tr>
+              <td>21/05 07:14</td>
+              <td>1,5</td>
+              <td>6,9</td>
+              <td>34,8</td>
+              <td>1,03</td>
+              <td>46,8</td>
+              <td>1,0</td>
+              <td><span class="status ok"><i class="ph ph-check"></i> OK</span></td>
+              <td>J. Souza</td>
+            </tr>
+            <tr>
+              <td>20/05 18:42</td>
+              <td>1,4</td>
+              <td>6,8</td>
+              <td>35,0</td>
+              <td>1,03</td>
+              <td>47,2</td>
+              <td>1,0</td>
+              <td><span class="status ok"><i class="ph ph-check"></i> OK</span></td>
+              <td>R. Alves</td>
+            </tr>
+            <tr>
+              <td>20/05 08:10</td>
+              <td>1,6</td>
+              <td>6,7</td>
+              <td>34,5</td>
+              <td>1,03</td>
+              <td>47,0</td>
+              <td>0,9</td>
+              <td><span class="status ok"><i class="ph ph-check"></i> OK</span></td>
+              <td>R. Alves</td>
+            </tr>
+            <tr>
+              <td>19/05 17:55</td>
+              <td>1,3</td>
+              <td>6,7</td>
+              <td>34,9</td>
+              <td>1,03</td>
+              <td>47,1</td>
+              <td>1,0</td>
+              <td><span class="status ok"><i class="ph ph-check"></i> OK</span></td>
+              <td>J. Souza</td>
+            </tr>
+            <tr>
+              <td>19/05 08:14</td>
+              <td>1,5</td>
+              <td>6,8</td>
+              <td>35,2</td>
+              <td>1,02</td>
+              <td>47,0</td>
+              <td>1,0</td>
+              <td><span class="status ok"><i class="ph ph-check"></i> OK</span></td>
+              <td>R. Alves</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AÇÕES -->
+      <div style="display:flex; gap:10px; margin-top:22px; justify-content:flex-end;">
+        <button class="btn btn-ghost"><i class="ph ph-x"></i> Descartar</button>
+        <button class="btn btn-secondary"><i class="ph ph-floppy-disk"></i> Salvar rascunho</button>
+        <button class="btn btn-primary"><i class="ph-fill ph-check-circle"></i> Confirmar leitura</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

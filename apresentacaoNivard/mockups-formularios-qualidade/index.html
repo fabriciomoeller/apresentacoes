@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Qualidade Digital · Nivard · Datainfo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="landing">
+    <div class="landing-header">
+      <span class="landing-logo">D</span>
+      <h1>Qualidade Digital Nivard</h1>
+      <p>8 formulários web integrados ao ERP Datainfo M3, derivados das planilhas reais da Nivard (FR015, FR019, FR032, FR045, FR049). Substitui planilhas e cadernos de turno, atende ISO 9001 e exigências do cliente automotivo.</p>
+    </div>
+
+    <h2 style="font-size:14px; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:.08em; margin: 0 0 16px;">Pacote Inicial · MVP de 4 formulários</h2>
+    <div class="form-cards">
+
+      <a class="form-card" href="01-controle-banho.html">
+        <div class="num">FORMULÁRIO 01 · FR049</div>
+        <h3><i class="ph-fill ph-flask"></i> Controle + Liberação de Banho</h3>
+        <p>Análise de liberação dos banhos por lote/tanque/nº de cargas: viscosidade, pH, densidade, teor de sólido, teor de cromo e alcalinidade, com situação A/R. Reprovação gera não-conformidade automática.</p>
+        <div class="meta">Uso: <strong>laboratório/químico · por lote de banho</strong></div>
+      </a>
+
+      <a class="form-card" href="02-laudo-final.html">
+        <div class="num">FORMULÁRIO 02 · FR015 (inspeção final)</div>
+        <h3><i class="ph-fill ph-test-tube"></i> Laudo Final por OS</h3>
+        <p>Inspeção final da Folha de Processo: camada (µm) multi-ponto com faixa, tape test (ISO 2409), aspecto visual, código de defeito TS-01…TS-20 e destino do material não conforme.</p>
+        <div class="meta">Uso: <strong>laboratório QA · fim da OS</strong></div>
+      </a>
+
+      <a class="form-card" href="03-nao-conformidade.html">
+        <div class="num">FORMULÁRIO 03</div>
+        <h3><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</h3>
+        <p>Registro de desvios com defeito catalogado (TS), causa-raiz 5 porquês, lote de insumo suspeito, ação imediata e destino. Vincula-se automaticamente ao banho ou laudo de origem.</p>
+        <div class="meta">Uso: <strong>QA e líderes · sob demanda</strong></div>
+      </a>
+
+      <a class="form-card" href="04-certificado.html">
+        <div class="num">FORMULÁRIO 04</div>
+        <h3><i class="ph-fill ph-certificate"></i> Certificado de Conformidade</h3>
+        <p>PDF gerado ao encerrar a OS, consolidando camada, aderência e Salt Spray (horas até corrosão vermelha · FR032), com QR Code de validação e assinatura digital do responsável QA.</p>
+        <div class="meta">Uso: <strong>QA · entrega ao cliente</strong></div>
+      </a>
+
+    </div>
+
+    <h2 style="font-size:14px; font-weight:800; color:#c026d3; text-transform:uppercase; letter-spacing:.08em; margin: 40px 0 16px;">Fase 2 · Cobertura completa das planilhas</h2>
+    <div class="form-cards">
+
+      <a class="form-card" href="05-folha-processo.html">
+        <div class="num">FORMULÁRIO 05 · FR015 completo</div>
+        <h3><i class="ph-fill ph-file-text"></i> Folha de Processo (traveler)</h3>
+        <p>Traveler digital inteiro: recebimento, pré-tratamento (limpeza, T.Q. d'água, amperagem, tape test, sulfato de cobre), receita base e top (3 aplicações cada com velocidade, viscosidade, estufa 4 zonas) e inspeção final.</p>
+        <div class="meta">Uso: <strong>chão de fábrica · acompanha lote do início ao fim</strong></div>
+      </a>
+
+      <a class="form-card" href="06-salt-spray-parametros.html">
+        <div class="num">FORMULÁRIO 06 · FR045</div>
+        <h3><i class="ph-fill ph-drop"></i> Salt Spray · Parâmetros</h3>
+        <p>Controle diário das câmaras SST1/SST2 com faixas reais: vazão (1–2 ml/h), pH (6,5–7,2), T câmara (33–37°C), densidade (1,02–1,04), pressão (0,8–1,2 kgf/cm²), NaCl 5%. Diário de bordo + cálculo Volume→Vazão.</p>
+        <div class="meta">Uso: <strong>laboratório · leitura diária por câmara</strong></div>
+      </a>
+
+      <a class="form-card" href="07-salt-spray-pecas.html">
+        <div class="num">FORMULÁRIO 07 · FR032</div>
+        <h3><i class="ph-fill ph-cube"></i> Salt Spray · Peças em ensaio</h3>
+        <p>Cada corpo de prova em ensaio: dimensional, característica primária/secundária, CDPC, camadas base/top, datas entrada/saída, equipamento, e a métrica-chave — horas em SST até a primeira corrosão vermelha.</p>
+        <div class="meta">Uso: <strong>laboratório · acompanhamento longo (semanas)</strong></div>
+      </a>
+
+      <a class="form-card" href="08-programacao-pcp.html">
+        <div class="num">FORMULÁRIO 08 · FR019</div>
+        <h3><i class="ph-fill ph-calendar"></i> Programação Diária PCP</h3>
+        <p>Sequenciamento diário das OS por linha (jato, base, top, conferência de camada, peça pronta), com filtros por tratamento, indicadores de bloqueio por banho reprovado e integração ao módulo Produção do ERP.</p>
+        <div class="meta">Uso: <strong>PCP / líder de produção · planejamento diário</strong></div>
+      </a>
+
+    </div>
+
+    <div class="landing-footer">
+      Datainfo · 2026 · Apresentação visual — dados ilustrativos · Mockups derivados das planilhas reais FR015 / FR019 / FR032 / FR045 / FR049
+    </div>
+  </div>
+</body>
+</html>

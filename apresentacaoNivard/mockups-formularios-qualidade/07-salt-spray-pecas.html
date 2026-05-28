@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Salt Spray · Peças (FR032) · Qualidade Nivard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Lista lateral de ensaios */
+    .test-list { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; }
+    .test-list-head { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; }
+    .test-list-head .ttl { font-size: 12px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: .04em; }
+    .test-item { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+    .test-item:hover { background: #f8fafc; }
+    .test-item.active { background: #eff6ff; border-left: 3px solid #2563eb; padding-left: 13px; }
+    .test-item .num { font-size: 11px; color: #2563eb; font-weight: 800; letter-spacing: .04em; }
+    .test-item .name { font-size: 13px; font-weight: 700; color: #0f172a; }
+    .test-item .meta { font-size: 11px; color: #64748b; display: flex; gap: 8px; align-items: center; }
+    .test-item:last-child { border-bottom: 0; }
+
+    /* Barra de progresso de horas em SST */
+    .progress-bar { position: relative; height: 28px; border-radius: 999px; background: #f1f5f9; border: 1px solid #e2e8f0; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #c026d3); border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; color: #fff; font-weight: 800; font-size: 12px; }
+    .progress-target { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #475569; font-weight: 700; }
+    .progress-marker { position: absolute; top: -2px; height: 32px; width: 2px; background: #b91c1c; }
+    .progress-marker::after { content: attr(data-label); position: absolute; top: -16px; left: -32px; font-size: 9px; color: #b91c1c; font-weight: 800; white-space: nowrap; text-transform: uppercase; letter-spacing: .04em; }
+
+    /* Mini-camada estratificada */
+    .layer-stack { display: flex; flex-direction: column; gap: 4px; padding: 14px; background: linear-gradient(180deg, #f8fafc, #fff); border: 1px solid #e2e8f0; border-radius: 12px; }
+    .layer { height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 11px; font-weight: 700; }
+    .layer.top { background: linear-gradient(90deg, #1e293b, #475569); color: #fff; }
+    .layer.base { background: linear-gradient(90deg, #2563eb, #60a5fa); color: #fff; }
+    .layer.substrate { height: 12px; background: #94a3b8; color: #fff; font-size: 9px; }
+    .layer-label-row { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; font-weight: 800; text-transform: uppercase; margin-top: 6px; }
+
+    /* Status do ensaio (big) */
+    .test-status { padding: 16px; border-radius: 12px; }
+    .test-status.in-progress { background: linear-gradient(135deg, #2563eb, #c026d3); color: #fff; }
+    .test-status .ts-label { font-size: 11px; opacity: .85; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+    .test-status .ts-value { font-size: 28px; font-weight: 900; margin-top: 4px; }
+    .test-status .ts-sub { font-size: 12px; opacity: .85; margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <label for="nav-toggle" class="nav-close-btn" aria-label="Fechar menu"><i class="ph ph-x"></i></label>
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Qualidade Nivard</div>
+        <div class="brand-sub">Datainfo M3 · Web</div>
+      </div>
+    </div>
+    <div class="nav-section">Coleta · Pacote Inicial</div>
+    <a href="01-controle-banho.html" class="nav-item"><i class="ph-fill ph-flask"></i> Banho + Liberação</a>
+    <a href="02-laudo-final.html" class="nav-item"><i class="ph-fill ph-test-tube"></i> Laudo Final</a>
+    <a href="03-nao-conformidade.html" class="nav-item"><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</a>
+    <a href="04-certificado.html" class="nav-item"><i class="ph-fill ph-certificate"></i> Certificado</a>
+    <div class="nav-section">Coleta · Fase 2</div>
+    <a href="05-folha-processo.html" class="nav-item"><i class="ph-fill ph-file-text"></i> Folha de Processo</a>
+    <a href="06-salt-spray-parametros.html" class="nav-item"><i class="ph-fill ph-drop"></i> SST · Parâmetros</a>
+    <a href="07-salt-spray-pecas.html" class="nav-item active"><i class="ph-fill ph-cube"></i> SST · Peças</a>
+    <a href="08-programacao-pcp.html" class="nav-item"><i class="ph-fill ph-calendar"></i> Programação PCP</a>
+    <div class="nav-section">Painéis</div>
+    <a href="#" class="nav-item"><i class="ph ph-chart-line"></i> Dashboard</a>
+    <a href="#" class="nav-item"><i class="ph ph-list-checks"></i> NCs abertas</a>
+    <a href="index.html" class="nav-item" style="margin-top:auto"><i class="ph ph-arrow-left"></i> Voltar à demo</a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <label for="nav-toggle" class="nav-open-btn" aria-label="Abrir menu"><i class="ph ph-list"></i></label>
+      <nav class="breadcrumb">
+        <i class="ph ph-house"></i> <span>Coleta</span>
+        <i class="ph ph-caret-right"></i> <strong>Salt Spray · Peças em ensaio</strong>
+      </nav>
+      <div class="user-chip">
+        <div class="avatar">RA</div>
+        <div>
+          <div style="font-weight:700;color:#0f172a">Renata Alves</div>
+          <div style="font-size:11px">Inspetora QA · Laboratório</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Peças em Ensaio Salt Spray</h1>
+          <div class="page-subtitle">Controle de corpos de prova · digitaliza o <strong>FR032 Rev.03</strong> · horas até corrosão vermelha</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="ph ph-funnel"></i> Filtrar</button>
+          <button class="btn btn-primary"><i class="ph-fill ph-plus-circle"></i> Cadastrar nova peça</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="grid-4" style="margin-bottom:18px">
+        <div class="kpi">
+          <div class="kpi-label">Ensaios em curso</div>
+          <div class="kpi-value">12</div>
+          <div class="kpi-trend">7 em SST1 · 5 em SST2</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Concluídos no mês</div>
+          <div class="kpi-value ok">28</div>
+          <div class="kpi-trend">25 aprovados · 3 reprovados</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Próximo a vencer</div>
+          <div class="kpi-value warn" style="font-size:18px">SST-1186</div>
+          <div class="kpi-trend">faltam 18h para 720h</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Média horas s/ corrosão</div>
+          <div class="kpi-value ok">742h</div>
+          <div class="kpi-trend">acima da meta (720h)</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="grid-template-columns: 280px 1fr; gap: 18px;">
+
+        <!-- LISTA DE ENSAIOS -->
+        <div class="test-list">
+          <div class="test-list-head">
+            <div class="ttl">Ensaios ativos</div>
+            <span class="tag">12</span>
+          </div>
+
+          <div class="test-item active">
+            <div class="num">SST-1186 · SST1</div>
+            <div class="name">Porca flangeada M10</div>
+            <div class="meta"><i class="ph ph-clock" style="color:#2563eb"></i> 702h / 720h <span class="status info" style="margin-left:auto">Em andamento</span></div>
+          </div>
+
+          <div class="test-item">
+            <div class="num">SST-1185 · SST1</div>
+            <div class="name">Parafuso sextavado M8</div>
+            <div class="meta"><i class="ph ph-clock"></i> 480h / 720h <span class="status info" style="margin-left:auto">Em andamento</span></div>
+          </div>
+
+          <div class="test-item">
+            <div class="num">SST-1184 · SST2</div>
+            <div class="name">Arruela DIN 125 · 16mm</div>
+            <div class="meta"><i class="ph ph-clock"></i> 312h / 720h <span class="status info" style="margin-left:auto">Em andamento</span></div>
+          </div>
+
+          <div class="test-item">
+            <div class="num">SST-1183 · SST2</div>
+            <div class="name">Prisioneiro M12 × 80</div>
+            <div class="meta"><i class="ph ph-clock"></i> 168h / 720h <span class="status info" style="margin-left:auto">Em andamento</span></div>
+          </div>
+
+          <div class="test-item">
+            <div class="num">SST-1182 · SST1</div>
+            <div class="name">Porca sextavada M14</div>
+            <div class="meta"><i class="ph-fill ph-x-circle" style="color:#e11d48"></i> 96h <span class="status danger" style="margin-left:auto">Corrosão</span></div>
+          </div>
+
+          <div class="test-item">
+            <div class="num">SST-1181 · SST2</div>
+            <div class="name">Anel elástico interno 22mm</div>
+            <div class="meta"><i class="ph ph-clock"></i> 48h / 720h <span class="status info" style="margin-left:auto">Em andamento</span></div>
+          </div>
+        </div>
+
+        <!-- DETALHE DO ENSAIO SELECIONADO -->
+        <div>
+          <!-- Cabeçalho do ensaio -->
+          <div class="card">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:18px">
+              <div>
+                <div style="font-size:11px; color:#2563eb; font-weight:800; letter-spacing:.06em; text-transform:uppercase;">Ensaio Nº SST-1186 · Câmara SST1</div>
+                <h2 style="font-size:20px; font-weight:800; color:#0f172a; margin:6px 0 4px">Porca flangeada M10 · OS-2864</h2>
+                <div style="font-size:13px; color:#64748b">Parafusos Brasil Ltda. · Lote LT-7748 · Geomet 321</div>
+              </div>
+              <div class="test-status in-progress" style="min-width: 200px; text-align:right;">
+                <div class="ts-label">Horas em SST</div>
+                <div class="ts-value">702 / 720</div>
+                <div class="ts-sub">faltam ~18h para meta</div>
+              </div>
+            </div>
+
+            <div class="progress-bar" style="margin-top:18px">
+              <div class="progress-fill" style="width: 97.5%">702h</div>
+              <div class="progress-target">meta · 720h</div>
+              <div class="progress-marker" style="right: 2.5%" data-label="meta"></div>
+            </div>
+          </div>
+
+          <!-- Identificação da peça e processo -->
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-identification-card"></i> Identificação da peça</div>
+            <div class="grid-4">
+              <div class="form-row"><label>Item / Código</label><input type="text" value="NV-GEO-1140"></div>
+              <div class="form-row"><label>Cliente</label><input type="text" value="Parafusos Brasil"></div>
+              <div class="form-row"><label>Peça</label><input type="text" value="Porca flangeada M10"></div>
+              <div class="form-row"><label>Tipo de peça</label><input type="text" value="Porca"></div>
+              <div class="form-row"><label>Dimensional</label><input type="text" value="M10 × 15"></div>
+              <div class="form-row"><label>Comprimento</label><input type="text" value="15 mm"></div>
+              <div class="form-row"><label>Característica primária</label><input type="text" value="Rosca interna"></div>
+              <div class="form-row"><label>Característica secundária</label><input type="text" value="Flange integrado"></div>
+              <div class="form-row"><label>CDPC</label><input type="text" value="CDPC-2864-A"></div>
+              <div class="form-row"><label>Qtd. de camadas</label><input type="number" value="4"></div>
+              <div class="form-row"><label>Acondicionamento térmico</label><input type="text" value="Estufa 80°C · 1h"></div>
+              <div class="form-row"><label>Norma</label><input type="text" value="ISO 9227"></div>
+            </div>
+          </div>
+
+          <!-- Processo aplicado e camadas -->
+          <div class="grid-2" style="gap:18px">
+            <div class="card">
+              <div class="card-title"><i class="ph-fill ph-stack"></i> Processo aplicado</div>
+              <div class="grid-2">
+                <div class="form-row">
+                  <label>Desengraxe</label>
+                  <div class="ar-toggle"><span class="a on">Sim</span><span class="r">Não</span></div>
+                </div>
+                <div class="form-row">
+                  <label>Jato</label>
+                  <div class="ar-toggle"><span class="a on">Sim</span><span class="r">Não</span></div>
+                </div>
+                <div class="form-row"><label>Base 1</label><input type="text" value="✔ aplicada"></div>
+                <div class="form-row"><label>Base 2</label><input type="text" value="✔ aplicada"></div>
+                <div class="form-row"><label>Base 3</label><input type="text" value="— não aplicada"></div>
+                <div class="form-row"><label>Top 1</label><input type="text" value="✔ aplicada"></div>
+                <div class="form-row"><label>Top 2</label><input type="text" value="✔ aplicada"></div>
+                <div class="form-row">
+                  <label>Folha de Processo</label>
+                  <a href="05-folha-processo.html" class="tag" style="text-decoration:none"><i class="ph ph-link"></i> FR015-2864</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><i class="ph-fill ph-ruler"></i> Camadas (µm)</div>
+              <div class="grid-2">
+                <div class="form-row"><label>Camada mínima (spec)</label><input type="number" value="8"></div>
+                <div class="form-row"><label>Camada máxima (spec)</label><input type="number" value="14"></div>
+                <div class="form-row"><label>Camada base coat</label><input type="number" value="7.2" step="0.1"></div>
+                <div class="form-row"><label>Camada top coat</label><input type="number" value="3.8" step="0.1"></div>
+                <div class="form-row"><label>Camada encontrada total</label><input type="number" value="11.0" step="0.1" style="background:#ecfdf5;font-weight:800"></div>
+                <div class="form-row"><label>Data verificação camada</label><input type="date" value="2026-05-21"></div>
+              </div>
+              <div class="layer-stack" style="margin-top:14px">
+                <div class="layer top">Top Coat<span>3,8 µm</span></div>
+                <div class="layer base">Base Coat<span>7,2 µm</span></div>
+                <div class="layer substrate">Substrato (aço)<span></span></div>
+                <div class="layer-label-row">
+                  <span>Camada total · 11,0 µm</span>
+                  <span style="color:#047857">Dentro da faixa 8–14</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acompanhamento SST -->
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-clock-counter-clockwise"></i> Acompanhamento na câmara</div>
+            <div class="grid-4">
+              <div class="form-row"><label>Equipamento SST</label>
+                <select><option selected>SST1 · Q-Fog CCT-600</option><option>SST2 · Ascott S450</option></select>
+              </div>
+              <div class="form-row"><label>Data de entrada</label><input type="datetime-local" value="2026-04-22T08:14"></div>
+              <div class="form-row"><label>Data prevista de saída</label><input type="datetime-local" value="2026-05-22T08:14"></div>
+              <div class="form-row"><label>Data efetiva de saída</label><input type="datetime-local" placeholder="—"></div>
+              <div class="form-row"><label>Hs. acumuladas em SST</label><input type="number" value="702" style="background:#f8fafc;font-weight:800"></div>
+              <div class="form-row"><label>Meta (h)</label><input type="number" value="720"></div>
+              <div class="form-row"><label>Critério</label><input type="text" value="ISO 9227 · NSS"></div>
+              <div class="form-row">
+                <label>Status</label>
+                <div style="padding-top:8px"><span class="status info"><i class="ph ph-spinner"></i> Em andamento</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Surgimento de Corrosão Vermelha -->
+          <div class="card" style="border-left: 4px solid #e11d48">
+            <div class="card-title"><i class="ph-fill ph-drop" style="color:#e11d48"></i> Surgimento de Corrosão Vermelha</div>
+            <div style="font-size:12px; color:#64748b; margin-bottom:12px">
+              Métrica-chave do ensaio. Registrar a primeira observação de corrosão vermelha (Fe₂O₃) — bloqueia o ensaio e dispara avaliação do laudo.
+            </div>
+            <div class="grid-4">
+              <div class="form-row"><label>Data do surgimento</label><input type="date" placeholder="—"></div>
+              <div class="form-row"><label>Hora</label><input type="time" placeholder="—"></div>
+              <div class="form-row"><label>Hs. em SST até o ponto</label><input type="number" placeholder="—"></div>
+              <div class="form-row"><label>Qtd. peças c/ corrosão</label><input type="number" placeholder="—"></div>
+            </div>
+            <div class="banner info" style="margin-top:14px">
+              <i class="ph-fill ph-check-circle"></i>
+              <div>
+                <strong>Sem corrosão vermelha até 702h</strong>
+                <span>Se o ensaio atingir 720h sem corrosão, o resultado é registrado como aprovado e segue para o certificado ao cliente.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status final / observações -->
+          <div class="grid-2" style="gap:18px">
+            <div class="card">
+              <div class="card-title"><i class="ph-fill ph-gavel"></i> Status da análise</div>
+              <div class="form-row">
+                <label>Resultado</label>
+                <select>
+                  <option>Aguardando conclusão</option>
+                  <option>Aprovado</option>
+                  <option>Reprovado</option>
+                  <option>Inconclusivo</option>
+                </select>
+              </div>
+              <div class="form-row" style="margin-top:12px">
+                <label>Responsável pela análise</label>
+                <input type="text" value="Renata Alves">
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title"><i class="ph-fill ph-note"></i> Observações</div>
+              <div class="form-row">
+                <label>Observações internas</label>
+                <textarea>Peça de lote sensível. Verificar pontos de contato no rack para evitar marca (TS-04).</textarea>
+              </div>
+              <div class="form-row" style="margin-top:12px">
+                <label>Observações ao cliente</label>
+                <textarea placeholder="Anotações que entrarão no certificado..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div style="display:flex; gap:10px; margin-top:18px; justify-content:flex-end;">
+            <button class="btn btn-ghost"><i class="ph ph-x"></i> Cancelar</button>
+            <button class="btn btn-secondary"><i class="ph ph-camera"></i> Anexar foto da peça</button>
+            <button class="btn btn-danger"><i class="ph-fill ph-warning-circle"></i> Registrar corrosão</button>
+            <button class="btn btn-primary"><i class="ph-fill ph-floppy-disk"></i> Salvar acompanhamento</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

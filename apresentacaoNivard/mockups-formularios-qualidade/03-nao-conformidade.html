@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Não-Conformidade · Qualidade Nivard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <label for="nav-toggle" class="nav-close-btn" aria-label="Fechar menu"><i class="ph ph-x"></i></label>
+    <div class="brand">
+      <div class="brand-logo">D</div>
+      <div>
+        <div class="brand-name">Qualidade Nivard</div>
+        <div class="brand-sub">Datainfo M3 · Web</div>
+      </div>
+    </div>
+    <div class="nav-section">Coleta · Pacote Inicial</div>
+    <a href="01-controle-banho.html" class="nav-item"><i class="ph-fill ph-flask"></i> Banho + Liberação</a>
+    <a href="02-laudo-final.html" class="nav-item"><i class="ph-fill ph-test-tube"></i> Laudo Final</a>
+    <a href="03-nao-conformidade.html" class="nav-item active"><i class="ph-fill ph-warning-octagon"></i> Não-Conformidade</a>
+    <a href="04-certificado.html" class="nav-item"><i class="ph-fill ph-certificate"></i> Certificado</a>
+    <div class="nav-section">Coleta · Fase 2</div>
+    <a href="05-folha-processo.html" class="nav-item"><i class="ph-fill ph-file-text"></i> Folha de Processo</a>
+    <a href="06-salt-spray-parametros.html" class="nav-item"><i class="ph-fill ph-drop"></i> SST · Parâmetros</a>
+    <a href="07-salt-spray-pecas.html" class="nav-item"><i class="ph-fill ph-cube"></i> SST · Peças</a>
+    <a href="08-programacao-pcp.html" class="nav-item"><i class="ph-fill ph-calendar"></i> Programação PCP</a>
+    <div class="nav-section">Painéis</div>
+    <a href="#" class="nav-item"><i class="ph ph-chart-line"></i> Dashboard</a>
+    <a href="#" class="nav-item"><i class="ph ph-list-checks"></i> NCs abertas</a>
+    <div class="nav-section">Configuração</div>
+    <a href="#" class="nav-item"><i class="ph ph-gear"></i> Cadastros</a>
+    <a href="index.html" class="nav-item" style="margin-top:auto"><i class="ph ph-arrow-left"></i> Voltar à demo</a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <label for="nav-toggle" class="nav-open-btn" aria-label="Abrir menu"><i class="ph ph-list"></i></label>
+      <nav class="breadcrumb">
+        <i class="ph ph-house"></i> <span>Tratativa</span>
+        <i class="ph ph-caret-right"></i> <strong>Não-Conformidade</strong>
+      </nav>
+      <div class="user-chip">
+        <div class="avatar">PM</div>
+        <div>
+          <div style="font-weight:700;color:#0f172a">Paula Moraes</div>
+          <div style="font-size:11px">Líder de Qualidade</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Registro de Não-Conformidade <span class="tag" style="vertical-align:middle">NC-2026-0457</span></h1>
+          <div class="page-subtitle">Defeitos catalogados conforme FR015 · escreve em <strong>k20NaoConformidade</strong> · 21/05/2026</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-secondary"><i class="ph ph-paperclip"></i> Anexos</button>
+          <button class="btn btn-primary"><i class="ph-fill ph-floppy-disk"></i> Salvar NC</button>
+        </div>
+      </div>
+
+      <div class="banner info" style="margin-bottom:18px">
+        <i class="ph-fill ph-robot"></i>
+        <div>
+          <strong>NC gerada automaticamente pelo sistema</strong>
+          <span>Originada da reprovação do banho <strong>T-04 · Geomet 321 Base · Lote BC-4471</strong> (teor de sólido abaixo da faixa) no formulário de Liberação de Banho. Campos de origem pré-preenchidos.</span>
+        </div>
+      </div>
+
+      <div class="grid-2" style="grid-template-columns: 1.4fr 1fr; gap: 22px;">
+
+        <!-- COLUNA ESQUERDA -->
+        <div>
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-identification-card"></i> Identificação</div>
+            <div class="grid-2">
+              <div class="form-row">
+                <label>Origem</label>
+                <select>
+                  <option selected>Banho (liberação)</option>
+                  <option>Inspeção / Laudo (OS)</option>
+                  <option>Recebimento de insumo</option>
+                  <option>Reclamação de cliente</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Referência de origem</label>
+                <input type="text" value="T-04 · BC-4471">
+              </div>
+              <div class="form-row">
+                <label>Lote / OS afetada</label>
+                <input type="text" value="OS-2864 · LT-7741">
+              </div>
+              <div class="form-row">
+                <label>Defeito catalogado</label>
+                <select>
+                  <option selected>TS-07 · Falha de banho</option>
+                  <option>TS-01 · Bolhas</option>
+                  <option>TS-12 · Corrosão</option>
+                  <option>TS-13 · Resíduo de óleo</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Turno</label>
+                <select><option>Turno A</option><option selected>Turno B</option><option>Turno C</option></select>
+              </div>
+              <div class="form-row">
+                <label>Operador</label>
+                <input type="text" value="Carlos Silva">
+              </div>
+              <div class="form-row">
+                <label>Lote de insumo suspeito</label>
+                <input type="text" value="Pasta Zn · INS-3390">
+              </div>
+              <div class="form-row">
+                <label>Data / hora da detecção</label>
+                <input type="datetime-local" value="2026-05-21T09:20">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-magnifying-glass"></i> Análise de causa-raiz · 5 Porquês</div>
+            <div class="form-row"><label>1. Por quê?</label><input type="text" value="Banho reprovado por teor de sólido abaixo do mínimo."></div>
+            <div class="form-row"><label>2. Por quê?</label><input type="text" value="Reposição de insumo feita em quantidade insuficiente."></div>
+            <div class="form-row"><label>3. Por quê?</label><input type="text" value="Cálculo da reposição não considerou o nº de cargas acumulado."></div>
+            <div class="form-row"><label>4. Por quê?</label><input type="text" value="Sem alerta de desgaste do banho por nº de cargas."></div>
+            <div class="form-row"><label>5. Por quê?</label><input type="text" value="Controle de cargas era manual em planilha (FR049)."></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-first-aid"></i> Ação imediata e destino</div>
+            <div class="form-row">
+              <label>Ação imediata</label>
+              <textarea>Bloqueio do tanque T-04 e das OS planejadas. Corrigir teor de sólido e reanalisar antes de liberar.</textarea>
+            </div>
+            <div class="grid-2" style="margin-top:12px">
+              <div class="form-row">
+                <label>Destino do material</label>
+                <select>
+                  <option selected>Retrabalho</option>
+                  <option>Seleção</option>
+                  <option>Descarte</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Responsável pela ação</label>
+                <input type="text" value="Leonardo Matos">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUNA DIREITA -->
+        <div>
+          <div class="card">
+            <div class="card-title"><i class="ph-fill ph-flag"></i> Situação da NC</div>
+            <div class="form-row">
+              <label>Status</label>
+              <div style="padding-top:6px"><span class="status warn"><i class="ph ph-hourglass"></i> Em tratamento</span></div>
+            </div>
+            <div class="form-row" style="margin-top:14px">
+              <label>Prazo de tratativa</label>
+              <input type="date" value="2026-05-26">
+            </div>
+            <div class="form-row" style="margin-top:14px">
+              <label>Abrir ação corretiva formal (Fase 2)</label>
+              <div style="padding-top:6px"><span class="status neutral"><i class="ph ph-toggle-left"></i> Não vinculada</span></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:18px">
+            <div class="card-title"><i class="ph-fill ph-camera"></i> Evidências</div>
+            <div class="photo-drop"><i class="ph ph-images"></i> Fotos do defeito / amostra</div>
+          </div>
+
+          <div class="card" style="margin-top:18px">
+            <div class="card-title"><i class="ph-fill ph-link"></i> Vínculos no ERP</div>
+            <table class="data">
+              <tbody>
+                <tr><td>Registro</td><td><span class="tag">k20NaoConformidade</span></td></tr>
+                <tr><td>Banho origem</td><td><strong>T-04 · BC-4471</strong></td></tr>
+                <tr><td>OS impactada</td><td><strong>OS-2864</strong> <span class="status warn">Reinspeção</span></td></tr>
+                <tr><td>Defeito</td><td><strong>TS-07</strong> · k20Defeito</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
