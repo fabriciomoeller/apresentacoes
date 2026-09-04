@@ -66,6 +66,10 @@ src: ./slides/13-mrp-calculo.md
 ---
 
 ---
+src: ./slides/13b-mrp-datas-emissao.md
+---
+
+---
 src: ./slides/14-mrp-cenarios.md
 ---
 
@@ -91,6 +95,46 @@ src: ./slides/18-custos-analise.md
 
 ---
 src: ./slides/19-qualidade.md
+---
+
+---
+src: ./slides/19b-novo-design-eme4.md
+---
+
+---
+src: ./slides/19c-eme4-tela-login.md
+---
+
+---
+src: ./slides/19d-eme4-login-novidades.md
+---
+
+---
+src: ./slides/19e-eme4-menu.md
+---
+
+---
+src: ./slides/19f-eme4-menu-recolhido.md
+---
+
+---
+src: ./slides/19g-eme4-modo-visualizacao.md
+---
+
+---
+src: ./slides/19h-eme4-versao.md
+---
+
+---
+src: ./slides/19i-eme4-sobre-principal.md
+---
+
+---
+src: ./slides/19j-eme4-sobre-updates.md
+---
+
+---
+src: ./slides/19k-eme4-sobre-notas-versao.md
 ---
 
 ---

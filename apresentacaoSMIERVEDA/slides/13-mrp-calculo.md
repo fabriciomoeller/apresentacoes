@@ -83,5 +83,5 @@ Impacto prático:
 "Esse cálculo que acabei de mostrar, feito manualmente em planilha cruzando 3 filiais e múltiplos kits, leva horas e é propício a erro. O EME4 faz isso em minutos, considera estoques em tempo real e já agenda as datas de compra com lead time da Rocol (90 dias) e dos nacionais (15 dias)."
 
 Transição:
-"E se a demanda mudar? E se quisermos simular um pico de safra agrícola antes de ela acontecer?"
+"Calculamos o QUE e o QUANTO. Falta o QUANDO — e é aí que o lead time de 90 dias da Rocol vira decisivo."
 -->

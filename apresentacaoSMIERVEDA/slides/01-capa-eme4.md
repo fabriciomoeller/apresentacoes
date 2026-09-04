@@ -6,8 +6,12 @@ transition: slide-left
 <!-- Fundo com imagem oficial EME4 -->
 <script setup>
 const bgUrl = `url(${import.meta.env.BASE_URL}capa-eme4-bg.png)`
+const smiervedaLogo = import.meta.env.BASE_URL + 'smierveda-branco.svg'
 </script>
 <div class="absolute inset-0 bg-cover bg-center" :style="{ backgroundImage: bgUrl }"></div>
+
+<!-- Logo do cliente -->
+<img :src="smiervedaLogo" class="absolute top-10 right-14 h-11 opacity-95" />
 
 <!-- Conteúdo na metade esquerda -->
 <div class="absolute top-0 left-0 bottom-0 flex flex-col justify-center pl-14 pb-16 text-left">

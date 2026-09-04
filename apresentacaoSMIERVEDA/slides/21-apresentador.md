@@ -5,6 +5,7 @@ layout: center
 
 <script setup>
 const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
+const smiervedaPng = import.meta.env.BASE_URL + 'smierveda.svg'
 </script>
 
 <div class="flex flex-col items-center gap-6 max-w-680px mx-auto">
@@ -23,7 +24,11 @@ const datainfoPng = import.meta.env.BASE_URL + 'datainfo.png'
   <div class="text-center">
     <h2 class="text-3xl font-800 text-slate-800 dark:text-slate-100 mb-1">Fabricio Moeller</h2>
     <div class="text-[1rem] font-600 text-blue-600 dark:text-blue-400">Engenheiro de Software · ERP EME4</div>
-    <img :src="datainfoPng" class="h-5 mx-auto mt-1 opacity-70" />
+    <div class="flex items-center justify-center gap-3 mt-1.5">
+      <img :src="datainfoPng" class="h-5 opacity-70" />
+      <span class="text-slate-300 dark:text-slate-600 text-xs">×</span>
+      <img :src="smiervedaPng" class="h-6 opacity-90" />
+    </div>
   </div>
 
   <!-- Divider -->
